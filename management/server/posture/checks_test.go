@@ -283,6 +283,7 @@ func TestChecks_Copy(t *testing.T) {
 					},
 				},
 			},
+			CertificateCheck: &CertificateCheck{},
 		},
 	}
 	checkCopy := check.Copy()

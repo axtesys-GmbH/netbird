@@ -1156,6 +1156,8 @@ components:
           $ref: '#/components/schemas/PeerNetworkRangeCheck'
         process_check:
           $ref: '#/components/schemas/ProcessCheck'
+        certificate_check:
+          $ref: '#/components/schemas/CertificateCheck'
     NBVersionCheck:
       description: Posture check for the version of NetBird
       type: object
@@ -1270,6 +1272,10 @@ components:
           description: Path to the process executable file in a Windows operating system
           type: string
           example: "C:\ProgramData\NetBird\netbird.exe"
+    CertificateCheck:
+      description: Posture check for certificate validation (not implemented)
+      type: object
+      properties: {}
     Location:
       description: Describe geographical location information
       type: object

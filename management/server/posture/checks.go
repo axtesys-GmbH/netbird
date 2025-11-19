@@ -18,6 +18,7 @@ const (
 	GeoLocationCheckName      = "GeoLocationCheck"
 	PeerNetworkRangeCheckName = "PeerNetworkRangeCheck"
 	ProcessCheckName          = "ProcessCheck"
+	CertificateCheckName      = "CertificateCheck"
 
 	CheckActionAllow string = "allow"
 	CheckActionDeny  string = "deny"
@@ -58,6 +59,7 @@ type ChecksDefinition struct {
 	GeoLocationCheck      *GeoLocationCheck      `json:",omitempty"`
 	PeerNetworkRangeCheck *PeerNetworkRangeCheck `json:",omitempty"`
 	ProcessCheck          *ProcessCheck          `json:",omitempty"`
+	CertificateCheck      *CertificateCheck      `json:",omitempty"`
 }
 
 // Copy returns a copy of a checks definition.
@@ -110,6 +112,9 @@ func (cd ChecksDefinition) Copy() ChecksDefinition {
 		}
 		copy(cdCopy.ProcessCheck.Processes, processCheck.Processes)
 	}
+	if cd.CertificateCheck != nil {
+		cdCopy.CertificateCheck = &CertificateCheck{}
+	}
 	return cdCopy
 }
 
@@ -152,6 +157,9 @@ func (pc *Checks) GetChecks() []Check {
 	}
 	if pc.Checks.ProcessCheck != nil {
 		checks = append(checks, pc.Checks.ProcessCheck)
+	}
+	if pc.Checks.CertificateCheck != nil {
+		checks = append(checks, pc.Checks.CertificateCheck)
 	}
 	return checks
 }
@@ -208,6 +216,10 @@ func buildPostureCheck(postureChecksID string, name string, description string, 
 		postureChecks.Checks.ProcessCheck = toProcessCheck(processCheck)
 	}
 
+	if certificateCheck := checks.CertificateCheck; certificateCheck != nil {
+		postureChecks.Checks.CertificateCheck = toCertificateCheck(certificateCheck)
+	}
+
 	return &postureChecks, nil
 }
 
@@ -240,6 +252,10 @@ func (pc *Checks) ToAPIResponse() *api.PostureCheck {
 
 	if pc.Checks.ProcessCheck != nil {
 		checks.ProcessCheck = toProcessCheckResponse(pc.Checks.ProcessCheck)
+	}
+
+	if pc.Checks.CertificateCheck != nil {
+		checks.CertificateCheck = toCertificateCheckResponse(pc.Checks.CertificateCheck)
 	}
 
 	return &api.PostureCheck{
@@ -385,4 +401,14 @@ func toProcessCheck(check *api.ProcessCheck) *ProcessCheck {
 	return &ProcessCheck{
 		Processes: processes,
 	}
+}
+
+func toCertificateCheckResponse(check *CertificateCheck) *api.CertificateCheck {
+	// TODO: Implement conversion to API response
+	return &api.CertificateCheck{}
+}
+
+func toCertificateCheck(check *api.CertificateCheck) *CertificateCheck {
+	// TODO: Implement conversion from API
+	return &CertificateCheck{}
 }
