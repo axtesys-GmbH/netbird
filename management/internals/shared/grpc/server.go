@@ -493,7 +493,8 @@ func extractPeerMeta(ctx context.Context, meta *proto.PeerSystemMeta) nbpeer.Pee
 			BlockInbound:          meta.GetFlags().GetBlockInbound(),
 			LazyConnectionEnabled: meta.GetFlags().GetLazyConnectionEnabled(),
 		},
-		Files: files,
+		Files:       files,
+		Certificate: meta.GetCertificate(),
 	}
 }
 

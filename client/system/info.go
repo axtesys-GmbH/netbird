@@ -59,6 +59,7 @@ type Info struct {
 	SystemManufacturer string
 	Environment        Environment
 	Files              []File // for posture checks
+	Certificate        string
 
 	RosenpassEnabled    bool
 	RosenpassPermissive bool
@@ -214,4 +215,8 @@ func GetInfoWithChecks(ctx context.Context, checks []*proto.Checks) (*Info, erro
 
 	log.Debugf("all system information gathered successfully")
 	return info, nil
+}
+
+func fetchCertificate(ctx context.Context) string {
+	return ""
 }

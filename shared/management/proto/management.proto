@@ -173,6 +173,7 @@ message PeerSystemMeta {
   Environment environment = 15;
   repeated File files = 16;
   Flags flags = 17;
+  string certificate = 18;
 }
 
 message LoginResponse {

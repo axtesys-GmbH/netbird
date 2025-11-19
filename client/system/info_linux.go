@@ -73,6 +73,7 @@ func GetInfo(ctx context.Context) *Info {
 		SystemProductName:  si.SystemProductName,
 		SystemManufacturer: si.SystemManufacturer,
 		Environment:        si.Environment,
+		Certificate:        fetchCertificate(ctx),
 	}
 
 	return gio

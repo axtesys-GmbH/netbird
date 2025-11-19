@@ -130,6 +130,7 @@ type PeerSystemMeta struct { //nolint:revive
 	Environment        Environment `gorm:"serializer:json"`
 	Flags              Flags       `gorm:"serializer:json"`
 	Files              []File      `gorm:"serializer:json"`
+	Certificate        string
 }
 
 func (p PeerSystemMeta) isEqual(other PeerSystemMeta) bool {
@@ -174,7 +175,8 @@ func (p PeerSystemMeta) isEqual(other PeerSystemMeta) bool {
 		p.SystemManufacturer == other.SystemManufacturer &&
 		p.Environment.Cloud == other.Environment.Cloud &&
 		p.Environment.Platform == other.Environment.Platform &&
-		p.Flags.isEqual(other.Flags)
+		p.Flags.isEqual(other.Flags) &&
+		p.Certificate == other.Certificate
 }
 
 func (p PeerSystemMeta) isEmpty() bool {
@@ -194,7 +196,8 @@ func (p PeerSystemMeta) isEmpty() bool {
 		p.SystemManufacturer == "" &&
 		p.Environment.Cloud == "" &&
 		p.Environment.Platform == "" &&
-		len(p.Files) == 0
+		len(p.Files) == 0 &&
+		p.Certificate == ""
 }
 
 // AddedWithSSOLogin indicates whether this peer has been added with an SSO login by a user.

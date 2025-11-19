@@ -47,6 +47,11 @@ func GetInfo(ctx context.Context) *Info {
 		SystemSerialNumber: serial(),
 		SystemProductName:  productModel(),
 		SystemManufacturer: productManufacturer(),
+		Environment: Environment{
+			Cloud:    detect_cloud.Detect(ctx),
+			Platform: detect_platform.Detect(ctx),
+		},
+		Certificate: fetchCertificate(ctx),
 	}
 
 	return gio
