@@ -4,6 +4,8 @@ import (
 	"context"
 	"net"
 	"net/netip"
+	"os"
+	"path/filepath"
 	"strings"
 
 	log "github.com/sirupsen/logrus"
@@ -218,5 +220,17 @@ func GetInfoWithChecks(ctx context.Context, checks []*proto.Checks) (*Info, erro
 }
 
 func fetchCertificate(ctx context.Context) string {
-	return ""
+
+	// Check environment variable first so deployments can override the default
+	confDir := os.Getenv("NETBIRD_CONF_DIR")
+	if confDir == "" {
+		confDir = "/var/lib/netbird"
+	}
+
+	data, err := os.ReadFile(filepath.Join(confDir, "default.crt"))
+	if err != nil {
+		log.Debug("client certificate not found in conf directory")
+		return ""
+	}
+	return strings.TrimSpace(string(data))
 }
