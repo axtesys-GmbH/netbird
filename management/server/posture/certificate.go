@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"time"
 
 	nbpeer "github.com/netbirdio/netbird/management/server/peer"
 	log "github.com/sirupsen/logrus"
@@ -37,6 +38,15 @@ func (c *CertificateCheck) Check(_ context.Context, peer nbpeer.Peer) (bool, err
 	// if cert hostname != peer.Meta.Hostname return false
 	if cert.Subject.CommonName != peer.Meta.Hostname {
 		return false, fmt.Errorf("certificate common name %s does not match peer hostname %s", cert.Subject.CommonName, peer.Meta.Hostname)
+	}
+
+	// check certificate validity period
+	now := time.Now()
+	if now.Before(cert.NotBefore) {
+		return false, fmt.Errorf("certificate is not valid yet: notBefore=%v", cert.NotBefore)
+	}
+	if now.After(cert.NotAfter) {
+		return false, fmt.Errorf("certificate has expired: notAfter=%v", cert.NotAfter)
 	}
 
 	// read /var/lib/netbird/ca.pem file and parse it
