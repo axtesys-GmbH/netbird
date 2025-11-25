@@ -1320,7 +1320,6 @@ type NetbirdConfig struct {
 	Signal *HostConfig  `protobuf:"bytes,3,opt,name=signal,proto3" json:"signal,omitempty"`
 	Relay  *RelayConfig `protobuf:"bytes,4,opt,name=relay,proto3" json:"relay,omitempty"`
 	Flow   *FlowConfig  `protobuf:"bytes,5,opt,name=flow,proto3" json:"flow,omitempty"`
-	Jwt    *JWTConfig   `protobuf:"bytes,6,opt,name=jwt,proto3" json:"jwt,omitempty"`
 }
 
 func (x *NetbirdConfig) Reset() {
@@ -1386,13 +1385,6 @@ func (x *NetbirdConfig) GetRelay() *RelayConfig {
 func (x *NetbirdConfig) GetFlow() *FlowConfig {
 	if x != nil {
 		return x.Flow
-	}
-	return nil
-}
-
-func (x *NetbirdConfig) GetJwt() *JWTConfig {
-	if x != nil {
-		return x.Jwt
 	}
 	return nil
 }
@@ -4153,60 +4145,59 @@ var file_management_proto_depIdxs = []int32{
 	19, // 19: management.NetbirdConfig.signal:type_name -> management.HostConfig
 	20, // 20: management.NetbirdConfig.relay:type_name -> management.RelayConfig
 	21, // 21: management.NetbirdConfig.flow:type_name -> management.FlowConfig
-	22, // 22: management.NetbirdConfig.jwt:type_name -> management.JWTConfig
-	3,  // 23: management.HostConfig.protocol:type_name -> management.HostConfig.Protocol
-	47, // 24: management.FlowConfig.interval:type_name -> google.protobuf.Duration
-	19, // 25: management.ProtectedHostConfig.hostConfig:type_name -> management.HostConfig
-	27, // 26: management.PeerConfig.sshConfig:type_name -> management.SSHConfig
-	24, // 27: management.NetworkMap.peerConfig:type_name -> management.PeerConfig
-	26, // 28: management.NetworkMap.remotePeers:type_name -> management.RemotePeerConfig
-	33, // 29: management.NetworkMap.Routes:type_name -> management.Route
-	34, // 30: management.NetworkMap.DNSConfig:type_name -> management.DNSConfig
-	26, // 31: management.NetworkMap.offlinePeers:type_name -> management.RemotePeerConfig
-	39, // 32: management.NetworkMap.FirewallRules:type_name -> management.FirewallRule
-	43, // 33: management.NetworkMap.routesFirewallRules:type_name -> management.RouteFirewallRule
-	44, // 34: management.NetworkMap.forwardingRules:type_name -> management.ForwardingRule
-	27, // 35: management.RemotePeerConfig.sshConfig:type_name -> management.SSHConfig
-	22, // 36: management.SSHConfig.jwtConfig:type_name -> management.JWTConfig
-	4,  // 37: management.DeviceAuthorizationFlow.Provider:type_name -> management.DeviceAuthorizationFlow.provider
-	32, // 38: management.DeviceAuthorizationFlow.ProviderConfig:type_name -> management.ProviderConfig
-	32, // 39: management.PKCEAuthorizationFlow.ProviderConfig:type_name -> management.ProviderConfig
-	37, // 40: management.DNSConfig.NameServerGroups:type_name -> management.NameServerGroup
-	35, // 41: management.DNSConfig.CustomZones:type_name -> management.CustomZone
-	36, // 42: management.CustomZone.Records:type_name -> management.SimpleRecord
-	38, // 43: management.NameServerGroup.NameServers:type_name -> management.NameServer
-	1,  // 44: management.FirewallRule.Direction:type_name -> management.RuleDirection
-	2,  // 45: management.FirewallRule.Action:type_name -> management.RuleAction
-	0,  // 46: management.FirewallRule.Protocol:type_name -> management.RuleProtocol
-	42, // 47: management.FirewallRule.PortInfo:type_name -> management.PortInfo
-	45, // 48: management.PortInfo.range:type_name -> management.PortInfo.Range
-	2,  // 49: management.RouteFirewallRule.action:type_name -> management.RuleAction
-	0,  // 50: management.RouteFirewallRule.protocol:type_name -> management.RuleProtocol
-	42, // 51: management.RouteFirewallRule.portInfo:type_name -> management.PortInfo
-	0,  // 52: management.ForwardingRule.protocol:type_name -> management.RuleProtocol
-	42, // 53: management.ForwardingRule.destinationPort:type_name -> management.PortInfo
-	42, // 54: management.ForwardingRule.translatedPort:type_name -> management.PortInfo
-	5,  // 55: management.ManagementService.Login:input_type -> management.EncryptedMessage
-	5,  // 56: management.ManagementService.Sync:input_type -> management.EncryptedMessage
-	17, // 57: management.ManagementService.GetServerKey:input_type -> management.Empty
-	17, // 58: management.ManagementService.isHealthy:input_type -> management.Empty
-	5,  // 59: management.ManagementService.GetDeviceAuthorizationFlow:input_type -> management.EncryptedMessage
-	5,  // 60: management.ManagementService.GetPKCEAuthorizationFlow:input_type -> management.EncryptedMessage
-	5,  // 61: management.ManagementService.SyncMeta:input_type -> management.EncryptedMessage
-	5,  // 62: management.ManagementService.Logout:input_type -> management.EncryptedMessage
-	5,  // 63: management.ManagementService.Login:output_type -> management.EncryptedMessage
-	5,  // 64: management.ManagementService.Sync:output_type -> management.EncryptedMessage
-	16, // 65: management.ManagementService.GetServerKey:output_type -> management.ServerKeyResponse
-	17, // 66: management.ManagementService.isHealthy:output_type -> management.Empty
-	5,  // 67: management.ManagementService.GetDeviceAuthorizationFlow:output_type -> management.EncryptedMessage
-	5,  // 68: management.ManagementService.GetPKCEAuthorizationFlow:output_type -> management.EncryptedMessage
-	17, // 69: management.ManagementService.SyncMeta:output_type -> management.Empty
-	17, // 70: management.ManagementService.Logout:output_type -> management.Empty
-	63, // [63:71] is the sub-list for method output_type
-	55, // [55:63] is the sub-list for method input_type
-	55, // [55:55] is the sub-list for extension type_name
-	55, // [55:55] is the sub-list for extension extendee
-	0,  // [0:55] is the sub-list for field type_name
+	3,  // 22: management.HostConfig.protocol:type_name -> management.HostConfig.Protocol
+	47, // 23: management.FlowConfig.interval:type_name -> google.protobuf.Duration
+	19, // 24: management.ProtectedHostConfig.hostConfig:type_name -> management.HostConfig
+	27, // 25: management.PeerConfig.sshConfig:type_name -> management.SSHConfig
+	24, // 26: management.NetworkMap.peerConfig:type_name -> management.PeerConfig
+	26, // 27: management.NetworkMap.remotePeers:type_name -> management.RemotePeerConfig
+	33, // 28: management.NetworkMap.Routes:type_name -> management.Route
+	34, // 29: management.NetworkMap.DNSConfig:type_name -> management.DNSConfig
+	26, // 30: management.NetworkMap.offlinePeers:type_name -> management.RemotePeerConfig
+	39, // 31: management.NetworkMap.FirewallRules:type_name -> management.FirewallRule
+	43, // 32: management.NetworkMap.routesFirewallRules:type_name -> management.RouteFirewallRule
+	44, // 33: management.NetworkMap.forwardingRules:type_name -> management.ForwardingRule
+	27, // 34: management.RemotePeerConfig.sshConfig:type_name -> management.SSHConfig
+	22, // 35: management.SSHConfig.jwtConfig:type_name -> management.JWTConfig
+	4,  // 36: management.DeviceAuthorizationFlow.Provider:type_name -> management.DeviceAuthorizationFlow.provider
+	32, // 37: management.DeviceAuthorizationFlow.ProviderConfig:type_name -> management.ProviderConfig
+	32, // 38: management.PKCEAuthorizationFlow.ProviderConfig:type_name -> management.ProviderConfig
+	37, // 39: management.DNSConfig.NameServerGroups:type_name -> management.NameServerGroup
+	35, // 40: management.DNSConfig.CustomZones:type_name -> management.CustomZone
+	36, // 41: management.CustomZone.Records:type_name -> management.SimpleRecord
+	38, // 42: management.NameServerGroup.NameServers:type_name -> management.NameServer
+	1,  // 43: management.FirewallRule.Direction:type_name -> management.RuleDirection
+	2,  // 44: management.FirewallRule.Action:type_name -> management.RuleAction
+	0,  // 45: management.FirewallRule.Protocol:type_name -> management.RuleProtocol
+	42, // 46: management.FirewallRule.PortInfo:type_name -> management.PortInfo
+	45, // 47: management.PortInfo.range:type_name -> management.PortInfo.Range
+	2,  // 48: management.RouteFirewallRule.action:type_name -> management.RuleAction
+	0,  // 49: management.RouteFirewallRule.protocol:type_name -> management.RuleProtocol
+	42, // 50: management.RouteFirewallRule.portInfo:type_name -> management.PortInfo
+	0,  // 51: management.ForwardingRule.protocol:type_name -> management.RuleProtocol
+	42, // 52: management.ForwardingRule.destinationPort:type_name -> management.PortInfo
+	42, // 53: management.ForwardingRule.translatedPort:type_name -> management.PortInfo
+	5,  // 54: management.ManagementService.Login:input_type -> management.EncryptedMessage
+	5,  // 55: management.ManagementService.Sync:input_type -> management.EncryptedMessage
+	17, // 56: management.ManagementService.GetServerKey:input_type -> management.Empty
+	17, // 57: management.ManagementService.isHealthy:input_type -> management.Empty
+	5,  // 58: management.ManagementService.GetDeviceAuthorizationFlow:input_type -> management.EncryptedMessage
+	5,  // 59: management.ManagementService.GetPKCEAuthorizationFlow:input_type -> management.EncryptedMessage
+	5,  // 60: management.ManagementService.SyncMeta:input_type -> management.EncryptedMessage
+	5,  // 61: management.ManagementService.Logout:input_type -> management.EncryptedMessage
+	5,  // 62: management.ManagementService.Login:output_type -> management.EncryptedMessage
+	5,  // 63: management.ManagementService.Sync:output_type -> management.EncryptedMessage
+	16, // 64: management.ManagementService.GetServerKey:output_type -> management.ServerKeyResponse
+	17, // 65: management.ManagementService.isHealthy:output_type -> management.Empty
+	5,  // 66: management.ManagementService.GetDeviceAuthorizationFlow:output_type -> management.EncryptedMessage
+	5,  // 67: management.ManagementService.GetPKCEAuthorizationFlow:output_type -> management.EncryptedMessage
+	17, // 68: management.ManagementService.SyncMeta:output_type -> management.Empty
+	17, // 69: management.ManagementService.Logout:output_type -> management.Empty
+	62, // [62:70] is the sub-list for method output_type
+	54, // [54:62] is the sub-list for method input_type
+	54, // [54:54] is the sub-list for extension type_name
+	54, // [54:54] is the sub-list for extension extendee
+	0,  // [0:54] is the sub-list for field type_name
 }
 
 func init() { file_management_proto_init() }
