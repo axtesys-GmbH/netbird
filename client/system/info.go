@@ -6,6 +6,7 @@ import (
 	"net/netip"
 	"os"
 	"path/filepath"
+	"runtime"
 	"strings"
 
 	log "github.com/sirupsen/logrus"
@@ -221,10 +222,17 @@ func GetInfoWithChecks(ctx context.Context, checks []*proto.Checks) (*Info, erro
 
 func fetchCertificate(ctx context.Context) string {
 
-	// Check environment variable first so deployments can override the default
-	confDir := os.Getenv("NETBIRD_CONF_DIR")
-	if confDir == "" {
-		confDir = "/var/lib/netbird"
+	confDir := "/var/lib/netbird/"
+
+	if stateDir := os.Getenv("NB_STATE_DIR"); stateDir != "" {
+		confDir = stateDir
+	} else {
+		switch runtime.GOOS {
+		case "windows":
+			confDir = filepath.Join(os.Getenv("PROGRAMDATA"), "Netbird")
+		case "freebsd":
+			confDir = "/var/db/netbird/"
+		}
 	}
 
 	data, err := os.ReadFile(filepath.Join(confDir, "default.crt"))
