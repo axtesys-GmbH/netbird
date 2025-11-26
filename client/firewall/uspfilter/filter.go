@@ -997,18 +997,23 @@ func (m *Manager) handleForwardedLocalTraffic(packetData []byte) bool {
 // handleRoutedTraffic handles routed traffic.
 // If it returns true, the packet should be dropped.
 func (m *Manager) handleRoutedTraffic(d *decoder, srcIP, dstIP netip.Addr, packetData []byte, size int) bool {
-	// Drop if routing is disabled
-	if !m.routingEnabled.Load() {
-		m.logger.Trace2("Dropping routed packet (routing disabled): src=%s dst=%s",
-			srcIP, dstIP)
-		return true
-	}
 
+	/// ------- START CUSTOM ACL PATCH -------
+
+	// ACL-PATCH: DO NOT DROP PACKET ON FreeBSD
+	// Drop if routing is disabled
+	//if !m.routingEnabled.Load() {
+	//	m.logger.Trace2("Dropping routed packet (routing disabled): src=%s dst=%s",
+	//		srcIP, dstIP)
+	//	return true
+	//}
+
+	// DO NOT PASS BEFORE ACL CHECK
 	// Pass to native stack if native router is enabled or forced
-	if m.nativeRouter.Load() {
-		m.trackInbound(d, srcIP, dstIP, nil, size)
-		return false
-	}
+	//if m.nativeRouter.Load() {
+	//	m.trackInbound(d, srcIP, dstIP, nil, size)
+	//	return false
+	//}
 
 	proto, pnum := getProtocolFromPacket(d)
 	srcPort, dstPort := getPortsFromPacket(d)
@@ -1035,21 +1040,28 @@ func (m *Manager) handleRoutedTraffic(d *decoder, srcIP, dstIP netip.Addr, packe
 		return true
 	}
 
-	// Let forwarder handle the packet if it passed route ACLs
-	fwd := m.forwarder.Load()
-	if fwd == nil {
-		m.logger.Trace("failed to forward routed packet (forwarder not initialized)")
-	} else {
-		fwd.RegisterRuleID(srcIP, dstIP, srcPort, dstPort, ruleID)
+	// ACL-PATCH: ALWAYS PASS TO NATIVE STACK ON FreeBSD
+	m.trackInbound(d, srcIP, dstIP, nil, size)
+	return false
 
-		if err := fwd.InjectIncomingPacket(packetData); err != nil {
-			m.logger.Error1("Failed to inject routed packet: %v", err)
-			fwd.DeleteRuleID(srcIP, dstIP, srcPort, dstPort)
-		}
-	}
+	// ACL-PATCH: DO NOT FORWARD ON FreeBSD
+	// Let forwarder handle the packet if it passed route ACLs
+	//fwd := m.forwarder.Load()
+	//if fwd == nil {
+	//	m.logger.Trace("failed to forward routed packet (forwarder not initialized)")
+	//} else {
+	//	fwd.RegisterRuleID(srcIP, dstIP, srcPort, dstPort, ruleID)
+	//
+	//	if err := fwd.InjectIncomingPacket(packetData); err != nil {
+	//		m.logger.Error1("Failed to inject routed packet: %v", err)
+	//		fwd.DeleteRuleID(srcIP, dstIP, srcPort, dstPort)
+	//	}
+	//}
 
 	// Forwarded packets shouldn't reach the native stack, hence they won't be visible in a packet capture
-	return true
+	// return true
+
+	/// ------- STOP CUSTOM ACL PATCH -------
 }
 
 func getProtocolFromPacket(d *decoder) (firewall.Protocol, nftypes.Protocol) {
