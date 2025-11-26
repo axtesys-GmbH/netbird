@@ -23,7 +23,7 @@ ENV PATH $GOROOT/bin:$PATH
 WORKDIR /app
 COPY . .
 
-RUN goreleaser release --snapshot --skip=publish,announce,docker -f .goreleaser_ui_darwin.yaml
+RUN goreleaser release --skip=publish,announce,docker -f .goreleaser_ui_darwin.yaml
 
 FROM scratch
 COPY --from=builder /app/dist .
