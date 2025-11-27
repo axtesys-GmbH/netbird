@@ -1,5 +1,6 @@
 package version
 
 const (
-	downloadURL = "https://app.netbird.io/install"
+	// AXTESYS CHANGE: Point to custom download URL
+	downloadURL = "https://exchange.axtesys.at/index.php/f/6774"
 )

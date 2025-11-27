@@ -30,11 +30,13 @@ const (
 	// It is used for backward compatibility now.
 	managementLegacyPortString = "33073"
 	// DefaultManagementURL points to the NetBird's cloud management endpoint
-	DefaultManagementURL = "https://api.netbird.io:443"
+	// AXTESYS CHANGE: Updated to use custom domain
+	DefaultManagementURL = "https://netbird.axtesys.it:443"
 	// oldDefaultManagementURL points to the NetBird's old cloud management endpoint
 	oldDefaultManagementURL = "https://api.wiretrustee.com:443"
 	// DefaultAdminURL points to NetBird's cloud management console
-	DefaultAdminURL = "https://app.netbird.io:443"
+	// AXTESYS CHANGE: Updated to use custom domain
+	DefaultAdminURL = "https://netbird.axtesys.it:443"
 )
 
 var DefaultInterfaceBlacklist = []string{
