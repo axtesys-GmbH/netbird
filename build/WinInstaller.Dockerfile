@@ -23,6 +23,10 @@ COPY . .
 
 ENV APPVER=0.0.0.1
 RUN mkdir -p dist/netbird_windows_amd64 && \
+    curl -L -o /tmp/wintun.zip https://www.wintun.net/download/wintun-1.14.0.zip && \
+    unzip /tmp/wintun.zip -d /tmp/wintun && \
+    cp -r /tmp/wintun/bin/amd64/* dist/netbird_windows_amd64/ && \
+    rm -r /tmp/wintun /tmp/wintun.zip && \
     cp dist/netbird_windows_amd64_v1/* dist/netbird_windows_amd64 && \
     cp dist/netbird-ui-windows-amd64_windows_amd64_v1/* dist/netbird_windows_amd64 && \
     makensis -V4 client/installer.nsis
