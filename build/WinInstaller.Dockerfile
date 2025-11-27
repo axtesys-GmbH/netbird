@@ -21,7 +21,8 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
 WORKDIR /app
 COPY . .
 
-ENV APPVER=0.0.0.1
+ARG APPVER=0.0.1.0
+ENV APPVER=${APPVER}
 RUN mkdir -p dist/netbird_windows_amd64 && \
     curl -L -o /tmp/wintun.zip https://www.wintun.net/builds/wintun-0.14.1.zip && \
     unzip /tmp/wintun.zip -d /tmp/wintun && \
@@ -29,6 +30,8 @@ RUN mkdir -p dist/netbird_windows_amd64 && \
     rm -r /tmp/wintun /tmp/wintun.zip && \
     cp dist/netbird_windows_amd64_v1/* dist/netbird_windows_amd64 && \
     cp dist/netbird-ui-windows-amd64_windows_amd64_v1/* dist/netbird_windows_amd64 && \
+    cp build/installer.nsis client/installer.nsis && \
+    makensis -VERSION && \
     makensis -V4 client/installer.nsis
 
 FROM scratch
