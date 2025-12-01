@@ -9,7 +9,7 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
         wget \
         build-essential \
         ca-certificates \
-        golang-1.23 \
+        golang-1.24 \
     && echo 'deb [trusted=yes] https://repo.goreleaser.com/apt/ /' | tee /etc/apt/sources.list.d/goreleaser.list \
     && apt-get update && apt-get -y install goreleaser \
     && apt-get clean \
@@ -22,7 +22,7 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
 ENV PATH="$PATH:/tmp/llvm-mingw-20250709-ucrt-ubuntu-22.04-x86_64/bin"
 
 # Configure Go
-ENV GOROOT /usr/lib/go-1.23
+ENV GOROOT /usr/lib/go-1.24
 ENV PATH $GOROOT/bin:$PATH
 
 

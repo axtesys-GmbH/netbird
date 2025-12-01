@@ -1,4 +1,4 @@
-FROM goreleaser/goreleaser-cross:v1.23.1 AS builder
+FROM goreleaser/goreleaser-cross:v1.24.10 AS builder
 
 WORKDIR /app
 COPY . .
