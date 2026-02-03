@@ -107,6 +107,8 @@ type Manager struct {
 	netstack bool
 	// indicates whether we forward local traffic to the native stack
 	localForwarding bool
+	// indicates whether we always apply firewall rules and pass to native firewall
+	alwaysUseFirewall bool
 
 	localipmanager *localIPManager
 

@@ -8,6 +8,7 @@ const (
 	disableFirewallFlag     = "disable-firewall"
 	blockLANAccessFlag      = "block-lan-access"
 	blockInboundFlag        = "block-inbound"
+	alwaysUseFirewallFlag   = "always-use-firewall"
 )
 
 var (
@@ -17,6 +18,7 @@ var (
 	disableFirewall     bool
 	blockLANAccess      bool
 	blockInbound        bool
+	alwaysUseFirewall   bool
 )
 
 func init() {
@@ -39,4 +41,7 @@ func init() {
 	upCmd.PersistentFlags().BoolVar(&blockInbound, blockInboundFlag, false,
 		"Block inbound connections. If enabled, the client will not allow any inbound connections to the local machine nor routed networks.\n"+
 			"This overrides any policies received from the management service.")
+
+	upCmd.PersistentFlags().BoolVar(&alwaysUseFirewall, alwaysUseFirewallFlag, false,
+		"Always use firewall rules and always pass to system firewall.")
 }

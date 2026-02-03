@@ -429,6 +429,10 @@ func setupSetConfigReq(customDNSAddressConverted []byte, cmd *cobra.Command, pro
 		req.BlockInbound = &blockInbound
 	}
 
+	if cmd.Flag(alwaysUseFirewallFlag).Changed {
+		req.AlwaysUseFirewall = &alwaysUseFirewall
+	}
+
 	if cmd.Flag(enableLazyConnectionFlag).Changed {
 		req.LazyConnectionEnabled = &lazyConnEnabled
 	}
@@ -544,6 +548,10 @@ func setupConfig(customDNSAddressConverted []byte, cmd *cobra.Command, configFil
 
 	if cmd.Flag(blockInboundFlag).Changed {
 		ic.BlockInbound = &blockInbound
+	}
+
+	if cmd.Flag(alwaysUseFirewallFlag).Changed {
+		ic.AlwaysUseFirewall = &alwaysUseFirewall
 	}
 
 	if cmd.Flag(enableLazyConnectionFlag).Changed {
