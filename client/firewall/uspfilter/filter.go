@@ -155,16 +155,16 @@ type decoder struct {
 }
 
 // Create userspace firewall manager constructor
-func Create(iface common.IFaceMapper, disableServerRoutes bool, flowLogger nftypes.FlowLogger, mtu uint16) (*Manager, error) {
-	return create(iface, nil, disableServerRoutes, flowLogger, mtu)
+func Create(iface common.IFaceMapper, disableServerRoutes bool, alwaysUseFirewall bool, flowLogger nftypes.FlowLogger, mtu uint16) (*Manager, error) {
+	return create(iface, nil, disableServerRoutes, alwaysUseFirewall, flowLogger, mtu)
 }
 
-func CreateWithNativeFirewall(iface common.IFaceMapper, nativeFirewall firewall.Manager, disableServerRoutes bool, flowLogger nftypes.FlowLogger, mtu uint16) (*Manager, error) {
+func CreateWithNativeFirewall(iface common.IFaceMapper, nativeFirewall firewall.Manager, disableServerRoutes bool, alwaysUseFirewall bool, flowLogger nftypes.FlowLogger, mtu uint16) (*Manager, error) {
 	if nativeFirewall == nil {
 		return nil, errors.New("native firewall is nil")
 	}
 
-	mgr, err := create(iface, nativeFirewall, disableServerRoutes, flowLogger, mtu)
+	mgr, err := create(iface, nativeFirewall, disableServerRoutes, alwaysUseFirewall, flowLogger, mtu)
 	if err != nil {
 		return nil, err
 	}
@@ -202,7 +202,7 @@ func parseCreateEnv() (bool, bool, bool) {
 	return disableConntrack, enableLocalForwarding, disableMSSClamping
 }
 
-func create(iface common.IFaceMapper, nativeFirewall firewall.Manager, disableServerRoutes bool, flowLogger nftypes.FlowLogger, mtu uint16) (*Manager, error) {
+func create(iface common.IFaceMapper, nativeFirewall firewall.Manager, disableServerRoutes bool, alwaysUseFirewall bool, flowLogger nftypes.FlowLogger, mtu uint16) (*Manager, error) {
 	disableConntrack, enableLocalForwarding, disableMSSClamping := parseCreateEnv()
 
 	m := &Manager{
@@ -226,6 +226,7 @@ func create(iface common.IFaceMapper, nativeFirewall firewall.Manager, disableSe
 		wgIface:             iface,
 		localipmanager:      newLocalIPManager(),
 		disableServerRoutes: disableServerRoutes,
+		alwaysUseFirewall:   alwaysUseFirewall,
 		stateful:            !disableConntrack,
 		logger:              nblog.NewFromLogrus(log.StandardLogger()),
 		flowLogger:          flowLogger,
@@ -1002,20 +1003,19 @@ func (m *Manager) handleRoutedTraffic(d *decoder, srcIP, dstIP netip.Addr, packe
 
 	/// ------- START CUSTOM ACL PATCH -------
 
-	// ACL-PATCH: DO NOT DROP PACKET ON FreeBSD
 	// Drop if routing is disabled
-	//if !m.routingEnabled.Load() {
-	//	m.logger.Trace2("Dropping routed packet (routing disabled): src=%s dst=%s",
-	//		srcIP, dstIP)
-	//	return true
-	//}
+	// Do not drop if always using firewall for routing
+	if !m.routingEnabled.Load() && !m.alwaysUseFirewall {
+		m.logger.Trace2("Dropping routed packet (routing disabled): src=%s dst=%s",
+			srcIP, dstIP)
+		return true
+	}
 
-	// DO NOT PASS BEFORE ACL CHECK
 	// Pass to native stack if native router is enabled or forced
-	//if m.nativeRouter.Load() {
-	//	m.trackInbound(d, srcIP, dstIP, nil, size)
-	//	return false
-	//}
+	if m.nativeRouter.Load() && !m.alwaysUseFirewall {
+		m.trackInbound(d, srcIP, dstIP, nil, size)
+		return false
+	}
 
 	proto, pnum := getProtocolFromPacket(d)
 	srcPort, dstPort := getPortsFromPacket(d)
@@ -1042,28 +1042,27 @@ func (m *Manager) handleRoutedTraffic(d *decoder, srcIP, dstIP netip.Addr, packe
 		return true
 	}
 
-	// ACL-PATCH: ALWAYS PASS TO NATIVE STACK ON FreeBSD
-	m.trackInbound(d, srcIP, dstIP, nil, size)
-	return false
+	// Pass to native stack if alwaysUseFirewall is true for local routing
+	if m.alwaysUseFirewall {
+		m.trackInbound(d, srcIP, dstIP, nil, size)
+		return false
+	}
 
-	// ACL-PATCH: DO NOT FORWARD ON FreeBSD
 	// Let forwarder handle the packet if it passed route ACLs
-	//fwd := m.forwarder.Load()
-	//if fwd == nil {
-	//	m.logger.Trace("failed to forward routed packet (forwarder not initialized)")
-	//} else {
-	//	fwd.RegisterRuleID(srcIP, dstIP, srcPort, dstPort, ruleID)
-	//
-	//	if err := fwd.InjectIncomingPacket(packetData); err != nil {
-	//		m.logger.Error1("Failed to inject routed packet: %v", err)
-	//		fwd.DeleteRuleID(srcIP, dstIP, srcPort, dstPort)
-	//	}
-	//}
+	fwd := m.forwarder.Load()
+	if fwd == nil {
+		m.logger.Trace("failed to forward routed packet (forwarder not initialized)")
+	} else {
+		fwd.RegisterRuleID(srcIP, dstIP, srcPort, dstPort, ruleID)
+
+		if err := fwd.InjectIncomingPacket(packetData); err != nil {
+			m.logger.Error1("Failed to inject routed packet: %v", err)
+			fwd.DeleteRuleID(srcIP, dstIP, srcPort, dstPort)
+		}
+	}
 
 	// Forwarded packets shouldn't reach the native stack, hence they won't be visible in a packet capture
-	// return true
-
-	/// ------- STOP CUSTOM ACL PATCH -------
+	return true
 }
 
 func getProtocolFromPacket(d *decoder) (firewall.Protocol, nftypes.Protocol) {
