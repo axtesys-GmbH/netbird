@@ -34,7 +34,7 @@ const SKIP_NFTABLES_ENV = "NB_SKIP_NFTABLES_CHECK"
 // FWType is the type for the firewall type
 type FWType int
 
-func NewFirewall(iface IFaceMapper, stateManager *statemanager.Manager, flowLogger nftypes.FlowLogger, disableServerRoutes bool, mtu uint16) (firewall.Manager, error) {
+func NewFirewall(iface IFaceMapper, stateManager *statemanager.Manager, flowLogger nftypes.FlowLogger, disableServerRoutes bool, alwaysUseFirewall bool, mtu uint16) (firewall.Manager, error) {
 	// on the linux system we try to user nftables or iptables
 	// in any case, because we need to allow netbird interface traffic
 	// so we use AllowNetbird traffic from these firewall managers
@@ -48,7 +48,7 @@ func NewFirewall(iface IFaceMapper, stateManager *statemanager.Manager, flowLogg
 	if err != nil {
 		log.Warnf("failed to create native firewall: %v. Proceeding with userspace", err)
 	}
-	return createUserspaceFirewall(iface, fm, disableServerRoutes, flowLogger, mtu)
+	return createUserspaceFirewall(iface, fm, disableServerRoutes, alwaysUseFirewall, flowLogger, mtu)
 }
 
 func createNativeFirewall(iface IFaceMapper, stateManager *statemanager.Manager, routes bool, mtu uint16) (firewall.Manager, error) {
@@ -78,12 +78,12 @@ func createFW(iface IFaceMapper, mtu uint16) (firewall.Manager, error) {
 	}
 }
 
-func createUserspaceFirewall(iface IFaceMapper, fm firewall.Manager, disableServerRoutes bool, flowLogger nftypes.FlowLogger, mtu uint16) (firewall.Manager, error) {
+func createUserspaceFirewall(iface IFaceMapper, fm firewall.Manager, disableServerRoutes bool, alwaysUseFirewall bool, flowLogger nftypes.FlowLogger, mtu uint16) (firewall.Manager, error) {
 	var errUsp error
 	if fm != nil {
-		fm, errUsp = uspfilter.CreateWithNativeFirewall(iface, fm, disableServerRoutes, flowLogger, mtu)
+		fm, errUsp = uspfilter.CreateWithNativeFirewall(iface, fm, disableServerRoutes, alwaysUseFirewall, flowLogger, mtu)
 	} else {
-		fm, errUsp = uspfilter.Create(iface, disableServerRoutes, flowLogger, mtu)
+		fm, errUsp = uspfilter.Create(iface, disableServerRoutes, alwaysUseFirewall, flowLogger, mtu)
 	}
 
 	if errUsp != nil {

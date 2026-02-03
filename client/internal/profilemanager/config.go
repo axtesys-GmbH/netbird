@@ -77,6 +77,7 @@ type ConfigInput struct {
 	DisableFirewall     *bool
 	BlockLANAccess      *bool
 	BlockInbound        *bool
+	AlwaysUseFirewall   *bool
 
 	DisableNotifications *bool
 
@@ -115,6 +116,7 @@ type Config struct {
 	DisableFirewall     bool
 	BlockLANAccess      bool
 	BlockInbound        bool
+	AlwaysUseFirewall   bool
 
 	DisableNotifications *bool
 
@@ -514,6 +516,16 @@ func (config *Config) apply(input ConfigInput) (updated bool, err error) {
 			log.Infof("allowing inbound connections")
 		}
 		config.BlockInbound = *input.BlockInbound
+		updated = true
+	}
+
+	if input.AlwaysUseFirewall != nil && *input.AlwaysUseFirewall != config.AlwaysUseFirewall {
+		if *input.AlwaysUseFirewall {
+			log.Infof("enabling always use of firewall")
+		} else {
+			log.Infof("disabling always use of firewall")
+		}
+		config.AlwaysUseFirewall = *input.AlwaysUseFirewall
 		updated = true
 	}
 

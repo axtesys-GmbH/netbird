@@ -107,6 +107,8 @@ type Manager struct {
 	netstack bool
 	// indicates whether we forward local traffic to the native stack
 	localForwarding bool
+	// indicates whether we always apply firewall rules and pass to native firewall
+	alwaysUseFirewall bool
 
 	localipmanager *localIPManager
 
@@ -153,16 +155,16 @@ type decoder struct {
 }
 
 // Create userspace firewall manager constructor
-func Create(iface common.IFaceMapper, disableServerRoutes bool, flowLogger nftypes.FlowLogger, mtu uint16) (*Manager, error) {
-	return create(iface, nil, disableServerRoutes, flowLogger, mtu)
+func Create(iface common.IFaceMapper, disableServerRoutes bool, alwaysUseFirewall bool, flowLogger nftypes.FlowLogger, mtu uint16) (*Manager, error) {
+	return create(iface, nil, disableServerRoutes, alwaysUseFirewall, flowLogger, mtu)
 }
 
-func CreateWithNativeFirewall(iface common.IFaceMapper, nativeFirewall firewall.Manager, disableServerRoutes bool, flowLogger nftypes.FlowLogger, mtu uint16) (*Manager, error) {
+func CreateWithNativeFirewall(iface common.IFaceMapper, nativeFirewall firewall.Manager, disableServerRoutes bool, alwaysUseFirewall bool, flowLogger nftypes.FlowLogger, mtu uint16) (*Manager, error) {
 	if nativeFirewall == nil {
 		return nil, errors.New("native firewall is nil")
 	}
 
-	mgr, err := create(iface, nativeFirewall, disableServerRoutes, flowLogger, mtu)
+	mgr, err := create(iface, nativeFirewall, disableServerRoutes, alwaysUseFirewall, flowLogger, mtu)
 	if err != nil {
 		return nil, err
 	}
@@ -200,7 +202,7 @@ func parseCreateEnv() (bool, bool, bool) {
 	return disableConntrack, enableLocalForwarding, disableMSSClamping
 }
 
-func create(iface common.IFaceMapper, nativeFirewall firewall.Manager, disableServerRoutes bool, flowLogger nftypes.FlowLogger, mtu uint16) (*Manager, error) {
+func create(iface common.IFaceMapper, nativeFirewall firewall.Manager, disableServerRoutes bool, alwaysUseFirewall bool, flowLogger nftypes.FlowLogger, mtu uint16) (*Manager, error) {
 	disableConntrack, enableLocalForwarding, disableMSSClamping := parseCreateEnv()
 
 	m := &Manager{
@@ -224,6 +226,7 @@ func create(iface common.IFaceMapper, nativeFirewall firewall.Manager, disableSe
 		wgIface:             iface,
 		localipmanager:      newLocalIPManager(),
 		disableServerRoutes: disableServerRoutes,
+		alwaysUseFirewall:   alwaysUseFirewall,
 		stateful:            !disableConntrack,
 		logger:              nblog.NewFromLogrus(log.StandardLogger()),
 		flowLogger:          flowLogger,
@@ -997,15 +1000,19 @@ func (m *Manager) handleForwardedLocalTraffic(packetData []byte) bool {
 // handleRoutedTraffic handles routed traffic.
 // If it returns true, the packet should be dropped.
 func (m *Manager) handleRoutedTraffic(d *decoder, srcIP, dstIP netip.Addr, packetData []byte, size int) bool {
+
+	/// ------- START CUSTOM ACL PATCH -------
+
 	// Drop if routing is disabled
-	if !m.routingEnabled.Load() {
+	// Do not drop if always using firewall for routing
+	if !m.routingEnabled.Load() && !m.alwaysUseFirewall {
 		m.logger.Trace2("Dropping routed packet (routing disabled): src=%s dst=%s",
 			srcIP, dstIP)
 		return true
 	}
 
 	// Pass to native stack if native router is enabled or forced
-	if m.nativeRouter.Load() {
+	if m.nativeRouter.Load() && !m.alwaysUseFirewall {
 		m.trackInbound(d, srcIP, dstIP, nil, size)
 		return false
 	}
@@ -1033,6 +1040,12 @@ func (m *Manager) handleRoutedTraffic(d *decoder, srcIP, dstIP netip.Addr, packe
 			RxBytes:   uint64(size),
 		})
 		return true
+	}
+
+	// Pass to native stack if alwaysUseFirewall is true for local routing
+	if m.alwaysUseFirewall {
+		m.trackInbound(d, srcIP, dstIP, nil, size)
+		return false
 	}
 
 	// Let forwarder handle the packet if it passed route ACLs
