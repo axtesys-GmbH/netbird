@@ -87,11 +87,8 @@ func (s *Server) getLoginCmd(username string, remoteAddr net.Addr) (string, []st
 
 	switch runtime.GOOS {
 	case "linux":
-		// Special handling for Arch Linux without /etc/pam.d/remote
-		if s.fileExists("/etc/arch-release") && !s.fileExists("/etc/pam.d/remote") {
-			return loginPath, []string{"-f", username, "-p"}, nil
-		}
-		return loginPath, []string{"-f", username, "-h", addrPort.Addr().String(), "-p"}, nil
+		p, a := s.getLinuxLoginCmd(loginPath, username, addrPort.Addr().String())
+		return p, a, nil
 	case "darwin", "freebsd", "openbsd", "netbsd", "dragonfly":
 		return loginPath, []string{"-fp", "-h", addrPort.Addr().String(), username}, nil
 	default:
@@ -99,7 +96,37 @@ func (s *Server) getLoginCmd(username string, remoteAddr net.Addr) (string, []st
 	}
 }
 
-// fileExists checks if a file exists (helper for login command logic)
+// getLinuxLoginCmd returns the login command for Linux systems.
+// Handles differences between util-linux and shadow-utils login implementations.
+func (s *Server) getLinuxLoginCmd(loginPath, username, remoteIP string) (string, []string) {
+	// Special handling for Arch Linux without /etc/pam.d/remote
+	var loginArgs []string
+	if s.fileExists("/etc/arch-release") && !s.fileExists("/etc/pam.d/remote") {
+		loginArgs = []string{"-f", username, "-p"}
+	} else {
+		loginArgs = []string{"-f", username, "-h", remoteIP, "-p"}
+	}
+
+	// util-linux login requires setsid -c to create a new session and set the
+	// controlling terminal. Without this, vhangup() kills the parent process.
+	// See https://bugs.debian.org/1078023 for details.
+	// TODO: handle this via the executor using syscall.Setsid() + TIOCSCTTY + syscall.Exec()
+	// to avoid external setsid dependency.
+	if !s.loginIsUtilLinux {
+		return loginPath, loginArgs
+	}
+
+	setsidPath, err := exec.LookPath("setsid")
+	if err != nil {
+		log.Warnf("setsid not available but util-linux login detected, login may fail: %v", err)
+		return loginPath, loginArgs
+	}
+
+	args := append([]string{"-w", "-c", loginPath}, loginArgs...)
+	return setsidPath, args
+}
+
+// fileExists checks if a file exists
 func (s *Server) fileExists(path string) bool {
 	_, err := os.Stat(path)
 	return err == nil
@@ -154,8 +181,8 @@ func (s *Server) getSupplementaryGroups(username string) ([]uint32, error) {
 
 // createExecutorCommand creates a command that spawns netbird ssh exec for privilege dropping.
 // Returns the command and a cleanup function (no-op on Unix).
-func (s *Server) createExecutorCommand(session ssh.Session, localUser *user.User, hasPty bool) (*exec.Cmd, func(), error) {
-	log.Debugf("creating executor command for user %s (Pty: %v)", localUser.Username, hasPty)
+func (s *Server) createExecutorCommand(logger *log.Entry, session ssh.Session, localUser *user.User, hasPty bool) (*exec.Cmd, func(), error) {
+	logger.Debugf("creating executor command for user %s (Pty: %v)", localUser.Username, hasPty)
 
 	if err := validateUsername(localUser.Username); err != nil {
 		return nil, nil, fmt.Errorf("invalid username %q: %w", localUser.Username, err)
@@ -165,7 +192,7 @@ func (s *Server) createExecutorCommand(session ssh.Session, localUser *user.User
 	if err != nil {
 		return nil, nil, fmt.Errorf("parse user credentials: %w", err)
 	}
-	privilegeDropper := NewPrivilegeDropper()
+	privilegeDropper := NewPrivilegeDropper(WithLogger(logger))
 	config := ExecutorConfig{
 		UID:        uid,
 		GID:        gid,
@@ -206,7 +233,7 @@ func (s *Server) createDirectPtyCommand(session ssh.Session, localUser *user.Use
 	shell := getUserShell(localUser.Uid)
 	args := s.getShellCommandArgs(shell, session.RawCommand())
 
-	cmd := exec.CommandContext(session.Context(), args[0], args[1:]...)
+	cmd := s.createShellCommand(session.Context(), shell, args)
 	cmd.Dir = localUser.HomeDir
 	cmd.Env = s.preparePtyEnv(localUser, ptyReq, session)
 

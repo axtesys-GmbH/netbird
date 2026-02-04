@@ -5,9 +5,6 @@ package settings
 import (
 	"context"
 	"fmt"
-	"time"
-
-	log "github.com/sirupsen/logrus"
 
 	"github.com/netbirdio/netbird/management/server/activity"
 	"github.com/netbirdio/netbird/management/server/integrations/extra_settings"
@@ -27,19 +24,28 @@ type Manager interface {
 	UpdateExtraSettings(ctx context.Context, accountID, userID string, extraSettings *types.ExtraSettings) (bool, error)
 }
 
+// IdpConfig holds IdP-related configuration that is set at runtime
+// and not stored in the database.
+type IdpConfig struct {
+	EmbeddedIdpEnabled bool
+	LocalAuthDisabled  bool
+}
+
 type managerImpl struct {
 	store                store.Store
 	extraSettingsManager extra_settings.Manager
 	userManager          users.Manager
 	permissionsManager   permissions.Manager
+	idpConfig            IdpConfig
 }
 
-func NewManager(store store.Store, userManager users.Manager, extraSettingsManager extra_settings.Manager, permissionsManager permissions.Manager) Manager {
+func NewManager(store store.Store, userManager users.Manager, extraSettingsManager extra_settings.Manager, permissionsManager permissions.Manager, idpConfig IdpConfig) Manager {
 	return &managerImpl{
 		store:                store,
 		extraSettingsManager: extraSettingsManager,
 		userManager:          userManager,
 		permissionsManager:   permissionsManager,
+		idpConfig:            idpConfig,
 	}
 }
 
@@ -48,11 +54,6 @@ func (m *managerImpl) GetExtraSettingsManager() extra_settings.Manager {
 }
 
 func (m *managerImpl) GetSettings(ctx context.Context, accountID, userID string) (*types.Settings, error) {
-	start := time.Now()
-	defer func() {
-		log.WithContext(ctx).Debugf("GetSettings took %s", time.Since(start))
-	}()
-
 	if userID != activity.SystemInitiator {
 		ok, err := m.permissionsManager.ValidateUserPermissions(ctx, accountID, userID, modules.Settings, operations.Read)
 		if err != nil {
@@ -81,6 +82,10 @@ func (m *managerImpl) GetSettings(ctx context.Context, accountID, userID string)
 		settings.Extra.FlowENCollectionEnabled = extraSettings.FlowENCollectionEnabled
 		settings.Extra.FlowDnsCollectionEnabled = extraSettings.FlowDnsCollectionEnabled
 	}
+
+	// Fill in IdP-related runtime settings
+	settings.EmbeddedIdpEnabled = m.idpConfig.EmbeddedIdpEnabled
+	settings.LocalAuthDisabled = m.idpConfig.LocalAuthDisabled
 
 	return settings, nil
 }

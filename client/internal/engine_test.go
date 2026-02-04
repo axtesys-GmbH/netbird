@@ -25,16 +25,18 @@ import (
 	"google.golang.org/grpc/keepalive"
 
 	"github.com/netbirdio/netbird/client/internal/stdnet"
+	"github.com/netbirdio/netbird/management/server/job"
 
 	"github.com/netbirdio/management-integrations/integrations"
 
 	"github.com/netbirdio/netbird/management/internals/controllers/network_map/controller"
 	"github.com/netbirdio/netbird/management/internals/controllers/network_map/update_channel"
+	"github.com/netbirdio/netbird/management/internals/modules/peers"
+	"github.com/netbirdio/netbird/management/internals/modules/peers/ephemeral/manager"
 	nbgrpc "github.com/netbirdio/netbird/management/internals/shared/grpc"
 
 	"github.com/netbirdio/netbird/management/internals/server/config"
 	"github.com/netbirdio/netbird/management/server/groups"
-	"github.com/netbirdio/netbird/management/server/peers/ephemeral/manager"
 
 	"github.com/netbirdio/netbird/client/iface"
 	"github.com/netbirdio/netbird/client/iface/configurer"
@@ -54,7 +56,6 @@ import (
 	"github.com/netbirdio/netbird/management/server"
 	"github.com/netbirdio/netbird/management/server/activity"
 	"github.com/netbirdio/netbird/management/server/integrations/port_forwarding"
-	"github.com/netbirdio/netbird/management/server/peers"
 	"github.com/netbirdio/netbird/management/server/permissions"
 	"github.com/netbirdio/netbird/management/server/settings"
 	"github.com/netbirdio/netbird/management/server/store"
@@ -106,6 +107,7 @@ type MockWGIface struct {
 	GetStatsFunc               func() (map[string]configurer.WGStats, error)
 	GetInterfaceGUIDStringFunc func() (string, error)
 	GetProxyFunc               func() wgproxy.Proxy
+	GetProxyPortFunc           func() uint16
 	GetNetFunc                 func() *netstack.Net
 	LastActivitiesFunc         func() map[string]monotime.Time
 }
@@ -202,6 +204,13 @@ func (m *MockWGIface) GetProxy() wgproxy.Proxy {
 	return m.GetProxyFunc()
 }
 
+func (m *MockWGIface) GetProxyPort() uint16 {
+	if m.GetProxyPortFunc != nil {
+		return m.GetProxyPortFunc()
+	}
+	return 0
+}
+
 func (m *MockWGIface) GetNet() *netstack.Net {
 	return m.GetNetFunc()
 }
@@ -210,6 +219,10 @@ func (m *MockWGIface) LastActivities() map[string]monotime.Time {
 	if m.LastActivitiesFunc != nil {
 		return m.LastActivitiesFunc()
 	}
+	return nil
+}
+
+func (m *MockWGIface) SetPresharedKey(peerKey string, psk wgtypes.Key, updateOnly bool) error {
 	return nil
 }
 
@@ -252,6 +265,7 @@ func TestEngine_SSH(t *testing.T) {
 		},
 		MobileDependency{},
 		peer.NewRecorder("https://mgm"),
+		nil,
 		nil,
 	)
 
@@ -414,21 +428,13 @@ func TestEngine_UpdateNetworkMap(t *testing.T) {
 	defer cancel()
 
 	relayMgr := relayClient.NewManager(ctx, nil, key.PublicKey().String(), iface.DefaultMTU)
-	engine := NewEngine(
-		ctx, cancel,
-		&signal.MockClient{},
-		&mgmt.MockClient{},
-		relayMgr,
-		&EngineConfig{
-			WgIfaceName:  "utun102",
-			WgAddr:       "100.64.0.1/24",
-			WgPrivateKey: key,
-			WgPort:       33100,
-			MTU:          iface.DefaultMTU,
-		},
-		MobileDependency{},
-		peer.NewRecorder("https://mgm"),
-		nil)
+	engine := NewEngine(ctx, cancel, &signal.MockClient{}, &mgmt.MockClient{}, relayMgr, &EngineConfig{
+		WgIfaceName:  "utun102",
+		WgAddr:       "100.64.0.1/24",
+		WgPrivateKey: key,
+		WgPort:       33100,
+		MTU:          iface.DefaultMTU,
+	}, MobileDependency{}, peer.NewRecorder("https://mgm"), nil, nil)
 
 	wgIface := &MockWGIface{
 		NameFunc: func() string { return "utun102" },
@@ -647,7 +653,7 @@ func TestEngine_Sync(t *testing.T) {
 		WgPrivateKey: key,
 		WgPort:       33100,
 		MTU:          iface.DefaultMTU,
-	}, MobileDependency{}, peer.NewRecorder("https://mgm"), nil)
+	}, MobileDependency{}, peer.NewRecorder("https://mgm"), nil, nil)
 	engine.ctx = ctx
 
 	engine.dnsServer = &dns.MockServer{
@@ -812,7 +818,7 @@ func TestEngine_UpdateNetworkMapWithRoutes(t *testing.T) {
 				WgPrivateKey: key,
 				WgPort:       33100,
 				MTU:          iface.DefaultMTU,
-			}, MobileDependency{}, peer.NewRecorder("https://mgm"), nil)
+			}, MobileDependency{}, peer.NewRecorder("https://mgm"), nil, nil)
 			engine.ctx = ctx
 			newNet, err := stdnet.NewNet(context.Background(), nil)
 			if err != nil {
@@ -1014,7 +1020,7 @@ func TestEngine_UpdateNetworkMapWithDNSUpdate(t *testing.T) {
 				WgPrivateKey: key,
 				WgPort:       33100,
 				MTU:          iface.DefaultMTU,
-			}, MobileDependency{}, peer.NewRecorder("https://mgm"), nil)
+			}, MobileDependency{}, peer.NewRecorder("https://mgm"), nil, nil)
 			engine.ctx = ctx
 
 			newNet, err := stdnet.NewNet(context.Background(), nil)
@@ -1540,7 +1546,7 @@ func createEngine(ctx context.Context, cancel context.CancelFunc, setupKey strin
 	}
 
 	relayMgr := relayClient.NewManager(ctx, nil, key.PublicKey().String(), iface.DefaultMTU)
-	e, err := NewEngine(ctx, cancel, signalClient, mgmtClient, relayMgr, conf, MobileDependency{}, peer.NewRecorder("https://mgm"), nil), nil
+	e, err := NewEngine(ctx, cancel, signalClient, mgmtClient, relayMgr, conf, MobileDependency{}, peer.NewRecorder("https://mgm"), nil, nil), nil
 	e.ctx = ctx
 	return e, err
 }
@@ -1606,6 +1612,7 @@ func startManagement(t *testing.T, dataDir, testFile string) (*grpc.Server, stri
 
 	permissionsManager := permissions.NewManager(store)
 	peersManager := peers.NewManager(store, permissionsManager)
+	jobManager := job.NewJobManager(nil, store, peersManager)
 
 	ia, _ := integrations.NewIntegratedValidator(context.Background(), peersManager, nil, eventStore)
 
@@ -1628,14 +1635,17 @@ func startManagement(t *testing.T, dataDir, testFile string) (*grpc.Server, stri
 
 	updateManager := update_channel.NewPeersUpdateManager(metrics)
 	requestBuffer := server.NewAccountRequestBuffer(context.Background(), store)
-	networkMapController := controller.NewController(context.Background(), store, metrics, updateManager, requestBuffer, server.MockIntegratedValidator{}, settingsMockManager, "netbird.selfhosted", port_forwarding.NewControllerMock(), config)
-	accountManager, err := server.BuildManager(context.Background(), config, store, networkMapController, nil, "", eventStore, nil, false, ia, metrics, port_forwarding.NewControllerMock(), settingsMockManager, permissionsManager, false)
+	networkMapController := controller.NewController(context.Background(), store, metrics, updateManager, requestBuffer, server.MockIntegratedValidator{}, settingsMockManager, "netbird.selfhosted", port_forwarding.NewControllerMock(), manager.NewEphemeralManager(store, peersManager), config)
+	accountManager, err := server.BuildManager(context.Background(), config, store, networkMapController, jobManager, nil, "", eventStore, nil, false, ia, metrics, port_forwarding.NewControllerMock(), settingsMockManager, permissionsManager, false)
 	if err != nil {
 		return nil, "", err
 	}
 
-	secretsManager := nbgrpc.NewTimeBasedAuthSecretsManager(updateManager, config.TURNConfig, config.Relay, settingsMockManager, groupsManager)
-	mgmtServer, err := nbgrpc.NewServer(config, accountManager, settingsMockManager, updateManager, secretsManager, nil, &manager.EphemeralManager{}, nil, &server.MockIntegratedValidator{}, networkMapController)
+	secretsManager, err := nbgrpc.NewTimeBasedAuthSecretsManager(updateManager, config.TURNConfig, config.Relay, settingsMockManager, groupsManager)
+	if err != nil {
+		return nil, "", err
+	}
+	mgmtServer, err := nbgrpc.NewServer(config, accountManager, settingsMockManager, jobManager, secretsManager, nil, nil, &server.MockIntegratedValidator{}, networkMapController, nil)
 	if err != nil {
 		return nil, "", err
 	}
