@@ -204,6 +204,7 @@ func verifyAllFieldsCovered(t *testing.T, req *proto.SetConfigRequest) {
 		"EnableSSHRemotePortForwarding": true,
 		"DisableSSHAuth":                true,
 		"SshJWTCacheTTL":                true,
+		"AlwaysUseFirewall":             true,
 	}
 
 	val := reflect.ValueOf(req).Elem()
