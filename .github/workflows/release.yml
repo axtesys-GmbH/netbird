@@ -117,7 +117,7 @@ jobs:
   release:
     # Disable bigger runner for now
     # runs-on: ubuntu-latest-m
-    runs-on: ubuntu-latest-m
+    runs-on: ubuntu-latest
     env:
       flags: ""
     steps:
