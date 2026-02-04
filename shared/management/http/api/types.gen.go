@@ -490,8 +490,14 @@ type BundleWorkloadResponse struct {
 	Type WorkloadType `json:"type"`
 }
 
+// CertificateCheck Posture check for certificate validation (not implemented)
+type CertificateCheck = map[string]interface{}
+
 // Checks List of objects that perform the actual checks
 type Checks struct {
+	// CertificateCheck Posture check for certificate validation (not implemented)
+	CertificateCheck *CertificateCheck `json:"certificate_check,omitempty"`
+
 	// GeoLocationCheck Posture check for geo location
 	GeoLocationCheck *GeoLocationCheck `json:"geo_location_check,omitempty"`
 
