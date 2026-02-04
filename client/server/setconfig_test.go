@@ -73,6 +73,7 @@ func TestSetConfig_AllFieldsSaved(t *testing.T) {
 	blockInbound := true
 	mtu := int64(1280)
 	sshJWTCacheTTL := int32(300)
+	alwaysUseFirewall := true
 
 	req := &proto.SetConfigRequest{
 		ProfileName:           profName,
@@ -104,6 +105,7 @@ func TestSetConfig_AllFieldsSaved(t *testing.T) {
 		DnsRouteInterval:      durationpb.New(2 * time.Minute),
 		Mtu:                   &mtu,
 		SshJWTCacheTTL:        &sshJWTCacheTTL,
+		AlwaysUseFirewall:     &alwaysUseFirewall,
 	}
 
 	_, err = s.SetConfig(ctx, req)
@@ -150,6 +152,7 @@ func TestSetConfig_AllFieldsSaved(t *testing.T) {
 	require.Equal(t, uint16(mtu), cfg.MTU)
 	require.NotNil(t, cfg.SSHJWTCacheTTL)
 	require.Equal(t, int(sshJWTCacheTTL), *cfg.SSHJWTCacheTTL)
+	require.Equal(t, alwaysUseFirewall, cfg.AlwaysUseFirewall)
 
 	verifyAllFieldsCovered(t, req)
 }
@@ -260,6 +263,7 @@ func TestCLIFlags_MappedToSetConfig(t *testing.T) {
 		"enable-ssh-remote-port-forwarding": "EnableSSHRemotePortForwarding",
 		"disable-ssh-auth":                  "DisableSSHAuth",
 		"ssh-jwt-cache-ttl":                 "SshJWTCacheTTL",
+		"always-use-firewall":               "AlwaysUseFirewall",
 	}
 
 	// SetConfigRequest fields that don't have CLI flags (settable only via UI or other means).
