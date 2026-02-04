@@ -50,6 +50,10 @@ const (
 	DaemonService_GetPeerSSHHostKey_FullMethodName          = "/daemon.DaemonService/GetPeerSSHHostKey"
 	DaemonService_RequestJWTAuth_FullMethodName             = "/daemon.DaemonService/RequestJWTAuth"
 	DaemonService_WaitJWTToken_FullMethodName               = "/daemon.DaemonService/WaitJWTToken"
+	DaemonService_StartCPUProfile_FullMethodName            = "/daemon.DaemonService/StartCPUProfile"
+	DaemonService_StopCPUProfile_FullMethodName             = "/daemon.DaemonService/StopCPUProfile"
+	DaemonService_NotifyOSLifecycle_FullMethodName          = "/daemon.DaemonService/NotifyOSLifecycle"
+	DaemonService_GetInstallerResult_FullMethodName         = "/daemon.DaemonService/GetInstallerResult"
 )
 
 // DaemonServiceClient is the client API for DaemonService service.
@@ -444,8 +448,9 @@ func (c *daemonServiceClient) WaitJWTToken(ctx context.Context, in *WaitJWTToken
 }
 
 func (c *daemonServiceClient) StartCPUProfile(ctx context.Context, in *StartCPUProfileRequest, opts ...grpc.CallOption) (*StartCPUProfileResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(StartCPUProfileResponse)
-	err := c.cc.Invoke(ctx, "/daemon.DaemonService/StartCPUProfile", in, out, opts...)
+	err := c.cc.Invoke(ctx, DaemonService_StartCPUProfile_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -453,8 +458,9 @@ func (c *daemonServiceClient) StartCPUProfile(ctx context.Context, in *StartCPUP
 }
 
 func (c *daemonServiceClient) StopCPUProfile(ctx context.Context, in *StopCPUProfileRequest, opts ...grpc.CallOption) (*StopCPUProfileResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(StopCPUProfileResponse)
-	err := c.cc.Invoke(ctx, "/daemon.DaemonService/StopCPUProfile", in, out, opts...)
+	err := c.cc.Invoke(ctx, DaemonService_StopCPUProfile_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -462,8 +468,9 @@ func (c *daemonServiceClient) StopCPUProfile(ctx context.Context, in *StopCPUPro
 }
 
 func (c *daemonServiceClient) NotifyOSLifecycle(ctx context.Context, in *OSLifecycleRequest, opts ...grpc.CallOption) (*OSLifecycleResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(OSLifecycleResponse)
-	err := c.cc.Invoke(ctx, "/daemon.DaemonService/NotifyOSLifecycle", in, out, opts...)
+	err := c.cc.Invoke(ctx, DaemonService_NotifyOSLifecycle_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -471,8 +478,9 @@ func (c *daemonServiceClient) NotifyOSLifecycle(ctx context.Context, in *OSLifec
 }
 
 func (c *daemonServiceClient) GetInstallerResult(ctx context.Context, in *InstallerResultRequest, opts ...grpc.CallOption) (*InstallerResultResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(InstallerResultResponse)
-	err := c.cc.Invoke(ctx, "/daemon.DaemonService/GetInstallerResult", in, out, opts...)
+	err := c.cc.Invoke(ctx, DaemonService_GetInstallerResult_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -645,16 +653,16 @@ func (UnimplementedDaemonServiceServer) WaitJWTToken(context.Context, *WaitJWTTo
 	return nil, status.Error(codes.Unimplemented, "method WaitJWTToken not implemented")
 }
 func (UnimplementedDaemonServiceServer) StartCPUProfile(context.Context, *StartCPUProfileRequest) (*StartCPUProfileResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method StartCPUProfile not implemented")
+	return nil, status.Error(codes.Unimplemented, "method StartCPUProfile not implemented")
 }
 func (UnimplementedDaemonServiceServer) StopCPUProfile(context.Context, *StopCPUProfileRequest) (*StopCPUProfileResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method StopCPUProfile not implemented")
+	return nil, status.Error(codes.Unimplemented, "method StopCPUProfile not implemented")
 }
 func (UnimplementedDaemonServiceServer) NotifyOSLifecycle(context.Context, *OSLifecycleRequest) (*OSLifecycleResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method NotifyOSLifecycle not implemented")
+	return nil, status.Error(codes.Unimplemented, "method NotifyOSLifecycle not implemented")
 }
 func (UnimplementedDaemonServiceServer) GetInstallerResult(context.Context, *InstallerResultRequest) (*InstallerResultResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetInstallerResult not implemented")
+	return nil, status.Error(codes.Unimplemented, "method GetInstallerResult not implemented")
 }
 func (UnimplementedDaemonServiceServer) mustEmbedUnimplementedDaemonServiceServer() {}
 func (UnimplementedDaemonServiceServer) testEmbeddedByValue()                       {}
@@ -1238,7 +1246,7 @@ func _DaemonService_StartCPUProfile_Handler(srv interface{}, ctx context.Context
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/daemon.DaemonService/StartCPUProfile",
+		FullMethod: DaemonService_StartCPUProfile_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(DaemonServiceServer).StartCPUProfile(ctx, req.(*StartCPUProfileRequest))
@@ -1256,7 +1264,7 @@ func _DaemonService_StopCPUProfile_Handler(srv interface{}, ctx context.Context,
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/daemon.DaemonService/StopCPUProfile",
+		FullMethod: DaemonService_StopCPUProfile_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(DaemonServiceServer).StopCPUProfile(ctx, req.(*StopCPUProfileRequest))
@@ -1274,7 +1282,7 @@ func _DaemonService_NotifyOSLifecycle_Handler(srv interface{}, ctx context.Conte
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/daemon.DaemonService/NotifyOSLifecycle",
+		FullMethod: DaemonService_NotifyOSLifecycle_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(DaemonServiceServer).NotifyOSLifecycle(ctx, req.(*OSLifecycleRequest))
@@ -1292,7 +1300,7 @@ func _DaemonService_GetInstallerResult_Handler(srv interface{}, ctx context.Cont
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/daemon.DaemonService/GetInstallerResult",
+		FullMethod: DaemonService_GetInstallerResult_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(DaemonServiceServer).GetInstallerResult(ctx, req.(*InstallerResultRequest))
