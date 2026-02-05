@@ -112,6 +112,7 @@ jobs:
           path: |
             ./netbird-*-issue.txt
             ./netbird-*.diff
+            ./work/pkg/netbird-*.pkg
           retention-days: 30
 
   release:
