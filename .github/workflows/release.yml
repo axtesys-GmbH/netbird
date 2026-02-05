@@ -57,7 +57,7 @@ jobs:
         uses: vmactions/freebsd-vm@v1
         with:
           usesh: true
-          copyback: false
+          copyback: true
           release: "15.0"
           prepare: |
             # Install required packages
@@ -103,6 +103,8 @@ jobs:
             netbird version | grep "$version"
 
             echo "FreeBSD port test completed successfully!"
+            
+            cp ./work/pkg/netbird-*.pkg $(dirname $DIFF_FILE)/
 
       - name: Upload FreeBSD port files
         if: steps.check_diff.outputs.diff_exists == 'true'
@@ -112,7 +114,7 @@ jobs:
           path: |
             ./netbird-*-issue.txt
             ./netbird-*.diff
-            ./work/pkg/netbird-*.pkg
+            ./netbird-*.pkg
           retention-days: 30
 
   release:
