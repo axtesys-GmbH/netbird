@@ -234,6 +234,8 @@ func TestWireguardPortDefaultVsExplicit(t *testing.T) {
 }
 
 func TestUpdateOldManagementURL(t *testing.T) {
+	baseDefaultManagementURL := "https://api.netbird.io:443"
+	baseOldDefaultManagementURL := "https://api.wiretrustee.com:443"
 	tests := []struct {
 		name                  string
 		previousManagementURL string
@@ -243,17 +245,17 @@ func TestUpdateOldManagementURL(t *testing.T) {
 		{
 			name:                  "Update old management URL with legacy port",
 			previousManagementURL: "https://api.wiretrustee.com:33073",
-			expectedManagementURL: DefaultManagementURL,
+			expectedManagementURL: baseDefaultManagementURL,
 		},
 		{
 			name:                  "Update old management URL",
-			previousManagementURL: oldDefaultManagementURL,
-			expectedManagementURL: DefaultManagementURL,
+			previousManagementURL: baseOldDefaultManagementURL,
+			expectedManagementURL: baseDefaultManagementURL,
 		},
 		{
 			name:                  "No update needed when management URL is up to date",
-			previousManagementURL: DefaultManagementURL,
-			expectedManagementURL: DefaultManagementURL,
+			previousManagementURL: baseDefaultManagementURL,
+			expectedManagementURL: baseDefaultManagementURL,
 			fileShouldNotChange:   true,
 		},
 		{
