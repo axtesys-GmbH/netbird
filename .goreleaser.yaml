@@ -11,7 +11,7 @@ builds:
     goarch:
       - wasm
     ldflags:
-      - -s -w -X github.com/axtesys-GmbH/netbird/version.version={{.Version}} -X main.commit={{.Commit}} -X main.date={{.CommitDate}} -X main.builtBy=goreleaser
+      - -s -w -X github.com/axtesys-gmbh/netbird/version.version={{.Version}} -X main.commit={{.Commit}} -X main.date={{.CommitDate}} -X main.builtBy=goreleaser
     mod_timestamp: "{{ .CommitTimestamp }}"
 
   - id: netbird
@@ -33,7 +33,7 @@ builds:
       - goos: windows
         goarch: 386
     ldflags:
-      - -s -w -X github.com/axtesys-GmbH/netbird/version.version={{.Version}} -X main.commit={{.Commit}} -X main.date={{.CommitDate}} -X main.builtBy=goreleaser
+      - -s -w -X github.com/axtesys-gmbh/netbird/version.version={{.Version}} -X main.commit={{.Commit}} -X main.date={{.CommitDate}} -X main.builtBy=goreleaser
     mod_timestamp: "{{ .CommitTimestamp }}"
     tags:
       - load_wgnt_from_rsrc
@@ -53,7 +53,7 @@ builds:
       - hardfloat
       - softfloat
     ldflags:
-      - -s -w -X github.com/axtesys-GmbH/netbird/version.version={{.Version}} -X main.commit={{.Commit}} -X main.date={{.CommitDate}} -X main.builtBy=goreleaser
+      - -s -w -X github.com/axtesys-gmbh/netbird/version.version={{.Version}} -X main.commit={{.Commit}} -X main.date={{.CommitDate}} -X main.builtBy=goreleaser
     mod_timestamp: "{{ .CommitTimestamp }}"
     tags:
       - load_wgnt_from_rsrc
@@ -75,7 +75,7 @@ builds:
       - arm64
       - arm
     ldflags:
-      - -s -w -X github.com/axtesys-GmbH/netbird/version.version={{.Version}} -X main.commit={{.Commit}} -X main.date={{.CommitDate}} -X main.builtBy=goreleaser
+      - -s -w -X github.com/axtesys-gmbh/netbird/version.version={{.Version}} -X main.commit={{.Commit}} -X main.date={{.CommitDate}} -X main.builtBy=goreleaser
     mod_timestamp: "{{ .CommitTimestamp }}"
 
   - id: netbird-signal
@@ -89,7 +89,7 @@ builds:
       - arm64
       - arm
     ldflags:
-      - -s -w -X github.com/axtesys-GmbH/netbird/version.version={{.Version}} -X main.commit={{.Commit}} -X main.date={{.CommitDate}} -X main.builtBy=goreleaser
+      - -s -w -X github.com/axtesys-gmbh/netbird/version.version={{.Version}} -X main.commit={{.Commit}} -X main.date={{.CommitDate}} -X main.builtBy=goreleaser
     mod_timestamp: "{{ .CommitTimestamp }}"
 
   - id: netbird-relay
@@ -103,7 +103,7 @@ builds:
       - arm64
       - arm
     ldflags:
-      - -s -w -X github.com/axtesys-GmbH/netbird/version.version={{.Version}} -X main.commit={{.Commit}} -X main.date={{.CommitDate}} -X main.builtBy=goreleaser
+      - -s -w -X github.com/axtesys-gmbh/netbird/version.version={{.Version}} -X main.commit={{.Commit}} -X main.date={{.CommitDate}} -X main.builtBy=goreleaser
     mod_timestamp: "{{ .CommitTimestamp }}"
 
   - id: netbird-upload
@@ -117,7 +117,7 @@ builds:
       - arm64
       - arm
     ldflags:
-      - -s -w -X github.com/axtesys-GmbH/netbird/version.version={{.Version}} -X main.commit={{.Commit}} -X main.date={{.CommitDate}} -X main.builtBy=goreleaser
+      - -s -w -X github.com/axtesys-gmbh/netbird/version.version={{.Version}} -X main.commit={{.Commit}} -X main.date={{.CommitDate}} -X main.builtBy=goreleaser
     mod_timestamp: "{{ .CommitTimestamp }}"
 
 universal_binaries:
@@ -163,8 +163,8 @@ archives:
 #      preremove: "release_files/pre_remove.sh"
 dockers:
   - image_templates:
-#      - axtesys-GmbH/netbird/netbird:{{ .Version }}-amd64
-      - ghcr.io/axtesys-GmbH/netbird/netbird:{{ .Version }}-amd64
+#      - axtesys-gmbh/netbird/netbird:{{ .Version }}-amd64
+      - ghcr.io/axtesys-gmbh/netbird/netbird:{{ .Version }}-amd64
     ids:
       - netbird
     goarch: amd64
@@ -178,11 +178,11 @@ dockers:
       - "--label=org.opencontainers.image.title={{.ProjectName}}"
       - "--label=org.opencontainers.image.version={{.Version}}"
       - "--label=org.opencontainers.image.revision={{.FullCommit}}"
-      - "--label=org.opencontainers.image.source=https://github.com/axtesys-GmbH/netbird/{{.ProjectName}}"
+      - "--label=org.opencontainers.image.source=https://github.com/axtesys-gmbh/netbird/{{.ProjectName}}"
       - "--label=maintainer=dev@netbird.io"
   - image_templates:
-#      - axtesys-GmbH/netbird/netbird:{{ .Version }}-arm64v8
-      - ghcr.io/axtesys-GmbH/netbird/netbird:{{ .Version }}-arm64v8
+#      - axtesys-gmbh/netbird/netbird:{{ .Version }}-arm64v8
+      - ghcr.io/axtesys-gmbh/netbird/netbird:{{ .Version }}-arm64v8
     ids:
       - netbird
     goarch: arm64
@@ -196,11 +196,11 @@ dockers:
       - "--label=org.opencontainers.image.title={{.ProjectName}}"
       - "--label=org.opencontainers.image.version={{.Version}}"
       - "--label=org.opencontainers.image.revision={{.FullCommit}}"
-      - "--label=org.opencontainers.image.source=https://github.com/axtesys-GmbH/netbird/{{.ProjectName}}"
+      - "--label=org.opencontainers.image.source=https://github.com/axtesys-gmbh/netbird/{{.ProjectName}}"
       - "--label=maintainer=dev@netbird.io"
   - image_templates:
-#      - axtesys-GmbH/netbird/netbird:{{ .Version }}-arm
-      - ghcr.io/axtesys-GmbH/netbird/netbird:{{ .Version }}-arm
+#      - axtesys-gmbh/netbird/netbird:{{ .Version }}-arm
+      - ghcr.io/axtesys-gmbh/netbird/netbird:{{ .Version }}-arm
     ids:
       - netbird
     goarch: arm
@@ -215,12 +215,12 @@ dockers:
       - "--label=org.opencontainers.image.title={{.ProjectName}}"
       - "--label=org.opencontainers.image.version={{.Version}}"
       - "--label=org.opencontainers.image.revision={{.FullCommit}}"
-      - "--label=org.opencontainers.image.source=https://github.com/axtesys-GmbH/netbird/{{.ProjectName}}"
+      - "--label=org.opencontainers.image.source=https://github.com/axtesys-gmbh/netbird/{{.ProjectName}}"
       - "--label=maintainer=dev@netbird.io"
 
   - image_templates:
-#      - axtesys-GmbH/netbird/netbird:{{ .Version }}-rootless-amd64
-      - ghcr.io/axtesys-GmbH/netbird/netbird:{{ .Version }}-rootless-amd64
+#      - axtesys-gmbh/netbird/netbird:{{ .Version }}-rootless-amd64
+      - ghcr.io/axtesys-gmbh/netbird/netbird:{{ .Version }}-rootless-amd64
     ids:
       - netbird
     goarch: amd64
@@ -234,11 +234,11 @@ dockers:
       - "--label=org.opencontainers.image.title={{.ProjectName}}"
       - "--label=org.opencontainers.image.version={{.Version}}"
       - "--label=org.opencontainers.image.revision={{.FullCommit}}"
-      - "--label=org.opencontainers.image.source=https://github.com/axtesys-GmbH/netbird/{{.ProjectName}}"
+      - "--label=org.opencontainers.image.source=https://github.com/axtesys-gmbh/netbird/{{.ProjectName}}"
       - "--label=maintainer=dev@netbird.io"
   - image_templates:
-#      - axtesys-GmbH/netbird/netbird:{{ .Version }}-rootless-arm64v8
-      - ghcr.io/axtesys-GmbH/netbird/netbird:{{ .Version }}-rootless-arm64v8
+#      - axtesys-gmbh/netbird/netbird:{{ .Version }}-rootless-arm64v8
+      - ghcr.io/axtesys-gmbh/netbird/netbird:{{ .Version }}-rootless-arm64v8
     ids:
       - netbird
     goarch: arm64
@@ -252,11 +252,11 @@ dockers:
       - "--label=org.opencontainers.image.title={{.ProjectName}}"
       - "--label=org.opencontainers.image.version={{.Version}}"
       - "--label=org.opencontainers.image.revision={{.FullCommit}}"
-      - "--label=org.opencontainers.image.source=https://github.com/axtesys-GmbH/netbird/{{.ProjectName}}"
+      - "--label=org.opencontainers.image.source=https://github.com/axtesys-gmbh/netbird/{{.ProjectName}}"
       - "--label=maintainer=dev@netbird.io"
   - image_templates:
-#      - axtesys-GmbH/netbird/netbird:{{ .Version }}-rootless-arm
-      - ghcr.io/axtesys-GmbH/netbird/netbird:{{ .Version }}-rootless-arm
+#      - axtesys-gmbh/netbird/netbird:{{ .Version }}-rootless-arm
+      - ghcr.io/axtesys-gmbh/netbird/netbird:{{ .Version }}-rootless-arm
     ids:
       - netbird
     goarch: arm
@@ -271,12 +271,12 @@ dockers:
       - "--label=org.opencontainers.image.title={{.ProjectName}}"
       - "--label=org.opencontainers.image.version={{.Version}}"
       - "--label=org.opencontainers.image.revision={{.FullCommit}}"
-      - "--label=org.opencontainers.image.source=https://github.com/axtesys-GmbH/netbird/{{.ProjectName}}"
+      - "--label=org.opencontainers.image.source=https://github.com/axtesys-gmbh/netbird/{{.ProjectName}}"
       - "--label=maintainer=dev@netbird.io"
 
   - image_templates:
-#      - axtesys-GmbH/netbird/relay:{{ .Version }}-amd64
-      - ghcr.io/axtesys-GmbH/netbird/relay:{{ .Version }}-amd64
+#      - axtesys-gmbh/netbird/relay:{{ .Version }}-amd64
+      - ghcr.io/axtesys-gmbh/netbird/relay:{{ .Version }}-amd64
     ids:
       - netbird-relay
     goarch: amd64
@@ -288,11 +288,11 @@ dockers:
       - "--label=org.opencontainers.image.title={{.ProjectName}}"
       - "--label=org.opencontainers.image.version={{.Version}}"
       - "--label=org.opencontainers.image.revision={{.FullCommit}}"
-      - "--label=org.opencontainers.image.source=https://github.com/axtesys-GmbH/netbird/{{.ProjectName}}"
+      - "--label=org.opencontainers.image.source=https://github.com/axtesys-gmbh/netbird/{{.ProjectName}}"
       - "--label=maintainer=dev@netbird.io"
   - image_templates:
-#      - axtesys-GmbH/netbird/relay:{{ .Version }}-arm64v8
-      - ghcr.io/axtesys-GmbH/netbird/relay:{{ .Version }}-arm64v8
+#      - axtesys-gmbh/netbird/relay:{{ .Version }}-arm64v8
+      - ghcr.io/axtesys-gmbh/netbird/relay:{{ .Version }}-arm64v8
     ids:
       - netbird-relay
     goarch: arm64
@@ -304,11 +304,11 @@ dockers:
       - "--label=org.opencontainers.image.title={{.ProjectName}}"
       - "--label=org.opencontainers.image.version={{.Version}}"
       - "--label=org.opencontainers.image.revision={{.FullCommit}}"
-      - "--label=org.opencontainers.image.source=https://github.com/axtesys-GmbH/netbird/{{.ProjectName}}"
+      - "--label=org.opencontainers.image.source=https://github.com/axtesys-gmbh/netbird/{{.ProjectName}}"
       - "--label=maintainer=dev@netbird.io"
   - image_templates:
-#      - axtesys-GmbH/netbird/relay:{{ .Version }}-arm
-      - ghcr.io/axtesys-GmbH/netbird/relay:{{ .Version }}-arm
+#      - axtesys-gmbh/netbird/relay:{{ .Version }}-arm
+      - ghcr.io/axtesys-gmbh/netbird/relay:{{ .Version }}-arm
     ids:
       - netbird-relay
     goarch: arm
@@ -321,11 +321,11 @@ dockers:
       - "--label=org.opencontainers.image.title={{.ProjectName}}"
       - "--label=org.opencontainers.image.version={{.Version}}"
       - "--label=org.opencontainers.image.revision={{.FullCommit}}"
-      - "--label=org.opencontainers.image.source=https://github.com/axtesys-GmbH/netbird/{{.ProjectName}}"
+      - "--label=org.opencontainers.image.source=https://github.com/axtesys-gmbh/netbird/{{.ProjectName}}"
       - "--label=maintainer=dev@netbird.io"
   - image_templates:
-#      - axtesys-GmbH/netbird/signal:{{ .Version }}-amd64
-      - ghcr.io/axtesys-GmbH/netbird/signal:{{ .Version }}-amd64
+#      - axtesys-gmbh/netbird/signal:{{ .Version }}-amd64
+      - ghcr.io/axtesys-gmbh/netbird/signal:{{ .Version }}-amd64
     ids:
       - netbird-signal
     goarch: amd64
@@ -337,11 +337,11 @@ dockers:
       - "--label=org.opencontainers.image.title={{.ProjectName}}"
       - "--label=org.opencontainers.image.version={{.Version}}"
       - "--label=org.opencontainers.image.revision={{.FullCommit}}"
-      - "--label=org.opencontainers.image.source=https://github.com/axtesys-GmbH/netbird/{{.ProjectName}}"
+      - "--label=org.opencontainers.image.source=https://github.com/axtesys-gmbh/netbird/{{.ProjectName}}"
       - "--label=maintainer=dev@netbird.io"
   - image_templates:
-#      - axtesys-GmbH/netbird/signal:{{ .Version }}-arm64v8
-      - ghcr.io/axtesys-GmbH/netbird/signal:{{ .Version }}-arm64v8
+#      - axtesys-gmbh/netbird/signal:{{ .Version }}-arm64v8
+      - ghcr.io/axtesys-gmbh/netbird/signal:{{ .Version }}-arm64v8
     ids:
       - netbird-signal
     goarch: arm64
@@ -353,11 +353,11 @@ dockers:
       - "--label=org.opencontainers.image.title={{.ProjectName}}"
       - "--label=org.opencontainers.image.version={{.Version}}"
       - "--label=org.opencontainers.image.revision={{.FullCommit}}"
-      - "--label=org.opencontainers.image.source=https://github.com/axtesys-GmbH/netbird/{{.ProjectName}}"
+      - "--label=org.opencontainers.image.source=https://github.com/axtesys-gmbh/netbird/{{.ProjectName}}"
       - "--label=maintainer=dev@netbird.io"
   - image_templates:
-#      - axtesys-GmbH/netbird/signal:{{ .Version }}-arm
-      - ghcr.io/axtesys-GmbH/netbird/signal:{{ .Version }}-arm
+#      - axtesys-gmbh/netbird/signal:{{ .Version }}-arm
+      - ghcr.io/axtesys-gmbh/netbird/signal:{{ .Version }}-arm
     ids:
       - netbird-signal
     goarch: arm
@@ -370,11 +370,11 @@ dockers:
       - "--label=org.opencontainers.image.title={{.ProjectName}}"
       - "--label=org.opencontainers.image.version={{.Version}}"
       - "--label=org.opencontainers.image.revision={{.FullCommit}}"
-      - "--label=org.opencontainers.image.source=https://github.com/axtesys-GmbH/netbird/{{.ProjectName}}"
+      - "--label=org.opencontainers.image.source=https://github.com/axtesys-gmbh/netbird/{{.ProjectName}}"
       - "--label=maintainer=dev@netbird.io"
   - image_templates:
-#      - axtesys-GmbH/netbird/management:{{ .Version }}-amd64
-      - ghcr.io/axtesys-GmbH/netbird/management:{{ .Version }}-amd64
+#      - axtesys-gmbh/netbird/management:{{ .Version }}-amd64
+      - ghcr.io/axtesys-gmbh/netbird/management:{{ .Version }}-amd64
     ids:
       - netbird-mgmt
     goarch: amd64
@@ -386,11 +386,11 @@ dockers:
       - "--label=org.opencontainers.image.title={{.ProjectName}}"
       - "--label=org.opencontainers.image.version={{.Version}}"
       - "--label=org.opencontainers.image.revision={{.FullCommit}}"
-      - "--label=org.opencontainers.image.source=https://github.com/axtesys-GmbH/netbird/{{.ProjectName}}"
+      - "--label=org.opencontainers.image.source=https://github.com/axtesys-gmbh/netbird/{{.ProjectName}}"
       - "--label=maintainer=dev@netbird.io"
   - image_templates:
-#      - axtesys-GmbH/netbird/management:{{ .Version }}-arm64v8
-      - ghcr.io/axtesys-GmbH/netbird/management:{{ .Version }}-arm64v8
+#      - axtesys-gmbh/netbird/management:{{ .Version }}-arm64v8
+      - ghcr.io/axtesys-gmbh/netbird/management:{{ .Version }}-arm64v8
     ids:
       - netbird-mgmt
     goarch: arm64
@@ -402,11 +402,11 @@ dockers:
       - "--label=org.opencontainers.image.title={{.ProjectName}}"
       - "--label=org.opencontainers.image.version={{.Version}}"
       - "--label=org.opencontainers.image.revision={{.FullCommit}}"
-      - "--label=org.opencontainers.image.source=https://github.com/axtesys-GmbH/netbird/{{.ProjectName}}"
+      - "--label=org.opencontainers.image.source=https://github.com/axtesys-gmbh/netbird/{{.ProjectName}}"
       - "--label=maintainer=dev@netbird.io"
   - image_templates:
-#      - axtesys-GmbH/netbird/management:{{ .Version }}-arm
-      - ghcr.io/axtesys-GmbH/netbird/management:{{ .Version }}-arm
+#      - axtesys-gmbh/netbird/management:{{ .Version }}-arm
+      - ghcr.io/axtesys-gmbh/netbird/management:{{ .Version }}-arm
     ids:
       - netbird-mgmt
     goarch: arm
@@ -419,11 +419,11 @@ dockers:
       - "--label=org.opencontainers.image.title={{.ProjectName}}"
       - "--label=org.opencontainers.image.version={{.Version}}"
       - "--label=org.opencontainers.image.revision={{.FullCommit}}"
-      - "--label=org.opencontainers.image.source=https://github.com/axtesys-GmbH/netbird/{{.ProjectName}}"
+      - "--label=org.opencontainers.image.source=https://github.com/axtesys-gmbh/netbird/{{.ProjectName}}"
       - "--label=maintainer=dev@netbird.io"
   - image_templates:
-#      - axtesys-GmbH/netbird/management:{{ .Version }}-debug-amd64
-      - ghcr.io/axtesys-GmbH/netbird/management:{{ .Version }}-debug-amd64
+#      - axtesys-gmbh/netbird/management:{{ .Version }}-debug-amd64
+      - ghcr.io/axtesys-gmbh/netbird/management:{{ .Version }}-debug-amd64
     ids:
       - netbird-mgmt
     goarch: amd64
@@ -435,11 +435,11 @@ dockers:
       - "--label=org.opencontainers.image.title={{.ProjectName}}"
       - "--label=org.opencontainers.image.version={{.Version}}"
       - "--label=org.opencontainers.image.revision={{.FullCommit}}"
-      - "--label=org.opencontainers.image.source=https://github.com/axtesys-GmbH/netbird/{{.ProjectName}}"
+      - "--label=org.opencontainers.image.source=https://github.com/axtesys-gmbh/netbird/{{.ProjectName}}"
       - "--label=maintainer=dev@netbird.io"
   - image_templates:
-#      - axtesys-GmbH/netbird/management:{{ .Version }}-debug-arm64v8
-      - ghcr.io/axtesys-GmbH/netbird/management:{{ .Version }}-debug-arm64v8
+#      - axtesys-gmbh/netbird/management:{{ .Version }}-debug-arm64v8
+      - ghcr.io/axtesys-gmbh/netbird/management:{{ .Version }}-debug-arm64v8
     ids:
       - netbird-mgmt
     goarch: arm64
@@ -451,12 +451,12 @@ dockers:
       - "--label=org.opencontainers.image.title={{.ProjectName}}"
       - "--label=org.opencontainers.image.version={{.Version}}"
       - "--label=org.opencontainers.image.revision={{.FullCommit}}"
-      - "--label=org.opencontainers.image.source=https://github.com/axtesys-GmbH/netbird/{{.ProjectName}}"
+      - "--label=org.opencontainers.image.source=https://github.com/axtesys-gmbh/netbird/{{.ProjectName}}"
       - "--label=maintainer=dev@netbird.io"
 
   - image_templates:
-#      - axtesys-GmbH/netbird/management:{{ .Version }}-debug-arm
-      - ghcr.io/axtesys-GmbH/netbird/management:{{ .Version }}-debug-arm
+#      - axtesys-gmbh/netbird/management:{{ .Version }}-debug-arm
+      - ghcr.io/axtesys-gmbh/netbird/management:{{ .Version }}-debug-arm
     ids:
       - netbird-mgmt
     goarch: arm
@@ -469,11 +469,11 @@ dockers:
       - "--label=org.opencontainers.image.title={{.ProjectName}}"
       - "--label=org.opencontainers.image.version={{.Version}}"
       - "--label=org.opencontainers.image.revision={{.FullCommit}}"
-      - "--label=org.opencontainers.image.source=https://github.com/axtesys-GmbH/netbird/{{.ProjectName}}"
+      - "--label=org.opencontainers.image.source=https://github.com/axtesys-gmbh/netbird/{{.ProjectName}}"
       - "--label=maintainer=dev@netbird.io"
   - image_templates:
-#      - axtesys-GmbH/netbird/upload:{{ .Version }}-amd64
-      - ghcr.io/axtesys-GmbH/netbird/upload:{{ .Version }}-amd64
+#      - axtesys-gmbh/netbird/upload:{{ .Version }}-amd64
+      - ghcr.io/axtesys-gmbh/netbird/upload:{{ .Version }}-amd64
     ids:
       - netbird-upload
     goarch: amd64
@@ -485,11 +485,11 @@ dockers:
       - "--label=org.opencontainers.image.title={{.ProjectName}}"
       - "--label=org.opencontainers.image.version={{.Version}}"
       - "--label=org.opencontainers.image.revision={{.FullCommit}}"
-      - "--label=org.opencontainers.image.source=https://github.com/axtesys-GmbH/netbird/{{.ProjectName}}"
+      - "--label=org.opencontainers.image.source=https://github.com/axtesys-gmbh/netbird/{{.ProjectName}}"
       - "--label=maintainer=dev@netbird.io"
   - image_templates:
-#      - axtesys-GmbH/netbird/upload:{{ .Version }}-arm64v8
-      - ghcr.io/axtesys-GmbH/netbird/upload:{{ .Version }}-arm64v8
+#      - axtesys-gmbh/netbird/upload:{{ .Version }}-arm64v8
+      - ghcr.io/axtesys-gmbh/netbird/upload:{{ .Version }}-arm64v8
     ids:
       - netbird-upload
     goarch: arm64
@@ -501,11 +501,11 @@ dockers:
       - "--label=org.opencontainers.image.title={{.ProjectName}}"
       - "--label=org.opencontainers.image.version={{.Version}}"
       - "--label=org.opencontainers.image.revision={{.FullCommit}}"
-      - "--label=org.opencontainers.image.source=https://github.com/axtesys-GmbH/netbird/{{.ProjectName}}"
+      - "--label=org.opencontainers.image.source=https://github.com/axtesys-gmbh/netbird/{{.ProjectName}}"
       - "--label=maintainer=dev@netbird.io"
   - image_templates:
-#      - axtesys-GmbH/netbird/upload:{{ .Version }}-arm
-      - ghcr.io/axtesys-GmbH/netbird/upload:{{ .Version }}-arm
+#      - axtesys-gmbh/netbird/upload:{{ .Version }}-arm
+      - ghcr.io/axtesys-gmbh/netbird/upload:{{ .Version }}-arm
     ids:
       - netbird-upload
     goarch: arm
@@ -518,168 +518,168 @@ dockers:
       - "--label=org.opencontainers.image.title={{.ProjectName}}"
       - "--label=org.opencontainers.image.version={{.Version}}"
       - "--label=org.opencontainers.image.revision={{.FullCommit}}"
-      - "--label=org.opencontainers.image.source=https://github.com/axtesys-GmbH/netbird/{{.ProjectName}}"
+      - "--label=org.opencontainers.image.source=https://github.com/axtesys-gmbh/netbird/{{.ProjectName}}"
       - "--label=maintainer=dev@netbird.io"
 docker_manifests:
-#  - name_template: axtesys-GmbH/netbird/netbird:{{ .Version }}
+#  - name_template: axtesys-gmbh/netbird/netbird:{{ .Version }}
 #    image_templates:
-#      - axtesys-GmbH/netbird/netbird:{{ .Version }}-arm64v8
-#      - axtesys-GmbH/netbird/netbird:{{ .Version }}-arm
-#      - axtesys-GmbH/netbird/netbird:{{ .Version }}-amd64
+#      - axtesys-gmbh/netbird/netbird:{{ .Version }}-arm64v8
+#      - axtesys-gmbh/netbird/netbird:{{ .Version }}-arm
+#      - axtesys-gmbh/netbird/netbird:{{ .Version }}-amd64
 #
-#  - name_template: axtesys-GmbH/netbird/netbird:latest
+#  - name_template: axtesys-gmbh/netbird/netbird:latest
 #    image_templates:
-#      - axtesys-GmbH/netbird/netbird:{{ .Version }}-arm64v8
-#      - axtesys-GmbH/netbird/netbird:{{ .Version }}-arm
-#      - axtesys-GmbH/netbird/netbird:{{ .Version }}-amd64
+#      - axtesys-gmbh/netbird/netbird:{{ .Version }}-arm64v8
+#      - axtesys-gmbh/netbird/netbird:{{ .Version }}-arm
+#      - axtesys-gmbh/netbird/netbird:{{ .Version }}-amd64
 #
-#  - name_template: axtesys-GmbH/netbird/netbird:{{ .Version }}-rootless
+#  - name_template: axtesys-gmbh/netbird/netbird:{{ .Version }}-rootless
 #    image_templates:
-#      - axtesys-GmbH/netbird/netbird:{{ .Version }}-rootless-arm64v8
-#      - axtesys-GmbH/netbird/netbird:{{ .Version }}-rootless-arm
-#      - axtesys-GmbH/netbird/netbird:{{ .Version }}-rootless-amd64
+#      - axtesys-gmbh/netbird/netbird:{{ .Version }}-rootless-arm64v8
+#      - axtesys-gmbh/netbird/netbird:{{ .Version }}-rootless-arm
+#      - axtesys-gmbh/netbird/netbird:{{ .Version }}-rootless-amd64
 #
-#  - name_template: axtesys-GmbH/netbird/netbird:rootless-latest
+#  - name_template: axtesys-gmbh/netbird/netbird:rootless-latest
 #    image_templates:
-#      - axtesys-GmbH/netbird/netbird:{{ .Version }}-rootless-arm64v8
-#      - axtesys-GmbH/netbird/netbird:{{ .Version }}-rootless-arm
-#      - axtesys-GmbH/netbird/netbird:{{ .Version }}-rootless-amd64
+#      - axtesys-gmbh/netbird/netbird:{{ .Version }}-rootless-arm64v8
+#      - axtesys-gmbh/netbird/netbird:{{ .Version }}-rootless-arm
+#      - axtesys-gmbh/netbird/netbird:{{ .Version }}-rootless-amd64
 #
-#  - name_template: axtesys-GmbH/netbird/relay:{{ .Version }}
+#  - name_template: axtesys-gmbh/netbird/relay:{{ .Version }}
 #    image_templates:
-#      - axtesys-GmbH/netbird/relay:{{ .Version }}-arm64v8
-#      - axtesys-GmbH/netbird/relay:{{ .Version }}-arm
-#      - axtesys-GmbH/netbird/relay:{{ .Version }}-amd64
+#      - axtesys-gmbh/netbird/relay:{{ .Version }}-arm64v8
+#      - axtesys-gmbh/netbird/relay:{{ .Version }}-arm
+#      - axtesys-gmbh/netbird/relay:{{ .Version }}-amd64
 #
-#  - name_template: axtesys-GmbH/netbird/relay:latest
+#  - name_template: axtesys-gmbh/netbird/relay:latest
 #    image_templates:
-#      - axtesys-GmbH/netbird/relay:{{ .Version }}-arm64v8
-#      - axtesys-GmbH/netbird/relay:{{ .Version }}-arm
-#      - axtesys-GmbH/netbird/relay:{{ .Version }}-amd64
+#      - axtesys-gmbh/netbird/relay:{{ .Version }}-arm64v8
+#      - axtesys-gmbh/netbird/relay:{{ .Version }}-arm
+#      - axtesys-gmbh/netbird/relay:{{ .Version }}-amd64
 #
-#  - name_template: axtesys-GmbH/netbird/signal:{{ .Version }}
+#  - name_template: axtesys-gmbh/netbird/signal:{{ .Version }}
 #    image_templates:
-#      - axtesys-GmbH/netbird/signal:{{ .Version }}-arm64v8
-#      - axtesys-GmbH/netbird/signal:{{ .Version }}-arm
-#      - axtesys-GmbH/netbird/signal:{{ .Version }}-amd64
+#      - axtesys-gmbh/netbird/signal:{{ .Version }}-arm64v8
+#      - axtesys-gmbh/netbird/signal:{{ .Version }}-arm
+#      - axtesys-gmbh/netbird/signal:{{ .Version }}-amd64
 #
-#  - name_template: axtesys-GmbH/netbird/signal:latest
+#  - name_template: axtesys-gmbh/netbird/signal:latest
 #    image_templates:
-#      - axtesys-GmbH/netbird/signal:{{ .Version }}-arm64v8
-#      - axtesys-GmbH/netbird/signal:{{ .Version }}-arm
-#      - axtesys-GmbH/netbird/signal:{{ .Version }}-amd64
+#      - axtesys-gmbh/netbird/signal:{{ .Version }}-arm64v8
+#      - axtesys-gmbh/netbird/signal:{{ .Version }}-arm
+#      - axtesys-gmbh/netbird/signal:{{ .Version }}-amd64
 #
-#  - name_template: axtesys-GmbH/netbird/management:{{ .Version }}
+#  - name_template: axtesys-gmbh/netbird/management:{{ .Version }}
 #    image_templates:
-#      - axtesys-GmbH/netbird/management:{{ .Version }}-arm64v8
-#      - axtesys-GmbH/netbird/management:{{ .Version }}-arm
-#      - axtesys-GmbH/netbird/management:{{ .Version }}-amd64
+#      - axtesys-gmbh/netbird/management:{{ .Version }}-arm64v8
+#      - axtesys-gmbh/netbird/management:{{ .Version }}-arm
+#      - axtesys-gmbh/netbird/management:{{ .Version }}-amd64
 #
-#  - name_template: axtesys-GmbH/netbird/management:latest
+#  - name_template: axtesys-gmbh/netbird/management:latest
 #    image_templates:
-#      - axtesys-GmbH/netbird/management:{{ .Version }}-arm64v8
-#      - axtesys-GmbH/netbird/management:{{ .Version }}-arm
-#      - axtesys-GmbH/netbird/management:{{ .Version }}-amd64
+#      - axtesys-gmbh/netbird/management:{{ .Version }}-arm64v8
+#      - axtesys-gmbh/netbird/management:{{ .Version }}-arm
+#      - axtesys-gmbh/netbird/management:{{ .Version }}-amd64
 #
-#  - name_template: axtesys-GmbH/netbird/management:debug-latest
+#  - name_template: axtesys-gmbh/netbird/management:debug-latest
 #    image_templates:
-#      - axtesys-GmbH/netbird/management:{{ .Version }}-debug-arm64v8
-#      - axtesys-GmbH/netbird/management:{{ .Version }}-debug-arm
-#      - axtesys-GmbH/netbird/management:{{ .Version }}-debug-amd64
-#  - name_template: axtesys-GmbH/netbird/upload:{{ .Version }}
+#      - axtesys-gmbh/netbird/management:{{ .Version }}-debug-arm64v8
+#      - axtesys-gmbh/netbird/management:{{ .Version }}-debug-arm
+#      - axtesys-gmbh/netbird/management:{{ .Version }}-debug-amd64
+#  - name_template: axtesys-gmbh/netbird/upload:{{ .Version }}
 #    image_templates:
-#      - axtesys-GmbH/netbird/upload:{{ .Version }}-arm64v8
-#      - axtesys-GmbH/netbird/upload:{{ .Version }}-arm
-#      - axtesys-GmbH/netbird/upload:{{ .Version }}-amd64
+#      - axtesys-gmbh/netbird/upload:{{ .Version }}-arm64v8
+#      - axtesys-gmbh/netbird/upload:{{ .Version }}-arm
+#      - axtesys-gmbh/netbird/upload:{{ .Version }}-amd64
 #
-#  - name_template: axtesys-GmbH/netbird/upload:latest
+#  - name_template: axtesys-gmbh/netbird/upload:latest
 #    image_templates:
-#      - axtesys-GmbH/netbird/upload:{{ .Version }}-arm64v8
-#      - axtesys-GmbH/netbird/upload:{{ .Version }}-arm
-#      - axtesys-GmbH/netbird/upload:{{ .Version }}-amd64
+#      - axtesys-gmbh/netbird/upload:{{ .Version }}-arm64v8
+#      - axtesys-gmbh/netbird/upload:{{ .Version }}-arm
+#      - axtesys-gmbh/netbird/upload:{{ .Version }}-amd64
 
-  - name_template: ghcr.io/axtesys-GmbH/netbird/netbird:{{ .Version }}
+  - name_template: ghcr.io/axtesys-gmbh/netbird/netbird:{{ .Version }}
     image_templates:
-      - ghcr.io/axtesys-GmbH/netbird/netbird:{{ .Version }}-arm64v8
-      - ghcr.io/axtesys-GmbH/netbird/netbird:{{ .Version }}-arm
-      - ghcr.io/axtesys-GmbH/netbird/netbird:{{ .Version }}-amd64
+      - ghcr.io/axtesys-gmbh/netbird/netbird:{{ .Version }}-arm64v8
+      - ghcr.io/axtesys-gmbh/netbird/netbird:{{ .Version }}-arm
+      - ghcr.io/axtesys-gmbh/netbird/netbird:{{ .Version }}-amd64
 
-  - name_template: ghcr.io/axtesys-GmbH/netbird/netbird:latest
+  - name_template: ghcr.io/axtesys-gmbh/netbird/netbird:latest
     image_templates:
-      - ghcr.io/axtesys-GmbH/netbird/netbird:{{ .Version }}-arm64v8
-      - ghcr.io/axtesys-GmbH/netbird/netbird:{{ .Version }}-arm
-      - ghcr.io/axtesys-GmbH/netbird/netbird:{{ .Version }}-amd64
+      - ghcr.io/axtesys-gmbh/netbird/netbird:{{ .Version }}-arm64v8
+      - ghcr.io/axtesys-gmbh/netbird/netbird:{{ .Version }}-arm
+      - ghcr.io/axtesys-gmbh/netbird/netbird:{{ .Version }}-amd64
 
-  - name_template: ghcr.io/axtesys-GmbH/netbird/netbird:{{ .Version }}-rootless
+  - name_template: ghcr.io/axtesys-gmbh/netbird/netbird:{{ .Version }}-rootless
     image_templates:
-      - ghcr.io/axtesys-GmbH/netbird/netbird:{{ .Version }}-rootless-arm64v8
-      - ghcr.io/axtesys-GmbH/netbird/netbird:{{ .Version }}-rootless-arm
-      - ghcr.io/axtesys-GmbH/netbird/netbird:{{ .Version }}-rootless-amd64
+      - ghcr.io/axtesys-gmbh/netbird/netbird:{{ .Version }}-rootless-arm64v8
+      - ghcr.io/axtesys-gmbh/netbird/netbird:{{ .Version }}-rootless-arm
+      - ghcr.io/axtesys-gmbh/netbird/netbird:{{ .Version }}-rootless-amd64
 
-  - name_template: ghcr.io/axtesys-GmbH/netbird/netbird:rootless-latest
+  - name_template: ghcr.io/axtesys-gmbh/netbird/netbird:rootless-latest
     image_templates:
-      - ghcr.io/axtesys-GmbH/netbird/netbird:{{ .Version }}-rootless-arm64v8
-      - ghcr.io/axtesys-GmbH/netbird/netbird:{{ .Version }}-rootless-arm
-      - ghcr.io/axtesys-GmbH/netbird/netbird:{{ .Version }}-rootless-amd64
+      - ghcr.io/axtesys-gmbh/netbird/netbird:{{ .Version }}-rootless-arm64v8
+      - ghcr.io/axtesys-gmbh/netbird/netbird:{{ .Version }}-rootless-arm
+      - ghcr.io/axtesys-gmbh/netbird/netbird:{{ .Version }}-rootless-amd64
 
-  - name_template: ghcr.io/axtesys-GmbH/netbird/relay:{{ .Version }}
+  - name_template: ghcr.io/axtesys-gmbh/netbird/relay:{{ .Version }}
     image_templates:
-      - ghcr.io/axtesys-GmbH/netbird/relay:{{ .Version }}-arm64v8
-      - ghcr.io/axtesys-GmbH/netbird/relay:{{ .Version }}-arm
-      - ghcr.io/axtesys-GmbH/netbird/relay:{{ .Version }}-amd64
+      - ghcr.io/axtesys-gmbh/netbird/relay:{{ .Version }}-arm64v8
+      - ghcr.io/axtesys-gmbh/netbird/relay:{{ .Version }}-arm
+      - ghcr.io/axtesys-gmbh/netbird/relay:{{ .Version }}-amd64
 
-  - name_template: ghcr.io/axtesys-GmbH/netbird/relay:latest
+  - name_template: ghcr.io/axtesys-gmbh/netbird/relay:latest
     image_templates:
-      - ghcr.io/axtesys-GmbH/netbird/relay:{{ .Version }}-arm64v8
-      - ghcr.io/axtesys-GmbH/netbird/relay:{{ .Version }}-arm
-      - ghcr.io/axtesys-GmbH/netbird/relay:{{ .Version }}-amd64
+      - ghcr.io/axtesys-gmbh/netbird/relay:{{ .Version }}-arm64v8
+      - ghcr.io/axtesys-gmbh/netbird/relay:{{ .Version }}-arm
+      - ghcr.io/axtesys-gmbh/netbird/relay:{{ .Version }}-amd64
 
-  - name_template: ghcr.io/axtesys-GmbH/netbird/signal:{{ .Version }}
+  - name_template: ghcr.io/axtesys-gmbh/netbird/signal:{{ .Version }}
     image_templates:
-      - ghcr.io/axtesys-GmbH/netbird/signal:{{ .Version }}-arm64v8
-      - ghcr.io/axtesys-GmbH/netbird/signal:{{ .Version }}-arm
-      - ghcr.io/axtesys-GmbH/netbird/signal:{{ .Version }}-amd64
+      - ghcr.io/axtesys-gmbh/netbird/signal:{{ .Version }}-arm64v8
+      - ghcr.io/axtesys-gmbh/netbird/signal:{{ .Version }}-arm
+      - ghcr.io/axtesys-gmbh/netbird/signal:{{ .Version }}-amd64
 
-  - name_template: ghcr.io/axtesys-GmbH/netbird/signal:latest
+  - name_template: ghcr.io/axtesys-gmbh/netbird/signal:latest
     image_templates:
-      - ghcr.io/axtesys-GmbH/netbird/signal:{{ .Version }}-arm64v8
-      - ghcr.io/axtesys-GmbH/netbird/signal:{{ .Version }}-arm
-      - ghcr.io/axtesys-GmbH/netbird/signal:{{ .Version }}-amd64
+      - ghcr.io/axtesys-gmbh/netbird/signal:{{ .Version }}-arm64v8
+      - ghcr.io/axtesys-gmbh/netbird/signal:{{ .Version }}-arm
+      - ghcr.io/axtesys-gmbh/netbird/signal:{{ .Version }}-amd64
 
-  - name_template: ghcr.io/axtesys-GmbH/netbird/management:{{ .Version }}
+  - name_template: ghcr.io/axtesys-gmbh/netbird/management:{{ .Version }}
     image_templates:
-      - ghcr.io/axtesys-GmbH/netbird/management:{{ .Version }}-arm64v8
-      - ghcr.io/axtesys-GmbH/netbird/management:{{ .Version }}-arm
-      - ghcr.io/axtesys-GmbH/netbird/management:{{ .Version }}-amd64
+      - ghcr.io/axtesys-gmbh/netbird/management:{{ .Version }}-arm64v8
+      - ghcr.io/axtesys-gmbh/netbird/management:{{ .Version }}-arm
+      - ghcr.io/axtesys-gmbh/netbird/management:{{ .Version }}-amd64
 
-  - name_template: ghcr.io/axtesys-GmbH/netbird/management:latest
+  - name_template: ghcr.io/axtesys-gmbh/netbird/management:latest
     image_templates:
-      - ghcr.io/axtesys-GmbH/netbird/management:{{ .Version }}-arm64v8
-      - ghcr.io/axtesys-GmbH/netbird/management:{{ .Version }}-arm
-      - ghcr.io/axtesys-GmbH/netbird/management:{{ .Version }}-amd64
+      - ghcr.io/axtesys-gmbh/netbird/management:{{ .Version }}-arm64v8
+      - ghcr.io/axtesys-gmbh/netbird/management:{{ .Version }}-arm
+      - ghcr.io/axtesys-gmbh/netbird/management:{{ .Version }}-amd64
 
-  - name_template: ghcr.io/axtesys-GmbH/netbird/management:debug-latest
+  - name_template: ghcr.io/axtesys-gmbh/netbird/management:debug-latest
     image_templates:
-      - ghcr.io/axtesys-GmbH/netbird/management:{{ .Version }}-debug-arm64v8
-      - ghcr.io/axtesys-GmbH/netbird/management:{{ .Version }}-debug-arm
-      - ghcr.io/axtesys-GmbH/netbird/management:{{ .Version }}-debug-amd64
+      - ghcr.io/axtesys-gmbh/netbird/management:{{ .Version }}-debug-arm64v8
+      - ghcr.io/axtesys-gmbh/netbird/management:{{ .Version }}-debug-arm
+      - ghcr.io/axtesys-gmbh/netbird/management:{{ .Version }}-debug-amd64
 
-  - name_template: ghcr.io/axtesys-GmbH/netbird/upload:{{ .Version }}
+  - name_template: ghcr.io/axtesys-gmbh/netbird/upload:{{ .Version }}
     image_templates:
-      - ghcr.io/axtesys-GmbH/netbird/upload:{{ .Version }}-arm64v8
-      - ghcr.io/axtesys-GmbH/netbird/upload:{{ .Version }}-arm
-      - ghcr.io/axtesys-GmbH/netbird/upload:{{ .Version }}-amd64
+      - ghcr.io/axtesys-gmbh/netbird/upload:{{ .Version }}-arm64v8
+      - ghcr.io/axtesys-gmbh/netbird/upload:{{ .Version }}-arm
+      - ghcr.io/axtesys-gmbh/netbird/upload:{{ .Version }}-amd64
 
-  - name_template: ghcr.io/axtesys-GmbH/netbird/upload:latest
+  - name_template: ghcr.io/axtesys-gmbh/netbird/upload:latest
     image_templates:
-      - ghcr.io/axtesys-GmbH/netbird/upload:{{ .Version }}-arm64v8
-      - ghcr.io/axtesys-GmbH/netbird/upload:{{ .Version }}-arm
-      - ghcr.io/axtesys-GmbH/netbird/upload:{{ .Version }}-amd64
+      - ghcr.io/axtesys-gmbh/netbird/upload:{{ .Version }}-arm64v8
+      - ghcr.io/axtesys-gmbh/netbird/upload:{{ .Version }}-arm
+      - ghcr.io/axtesys-gmbh/netbird/upload:{{ .Version }}-amd64
 brews:
   - ids:
       - default
     repository:
-      owner: axtesys-GmbH
+      owner: axtesys-gmbh
       name: homebrew-tap
       token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"
     commit_author:
