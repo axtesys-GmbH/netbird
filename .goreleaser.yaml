@@ -680,7 +680,7 @@ brews:
       - default
     repository:
       owner: axtesys-gmbh
-      name: netbird/homebrew-tap
+      name: netbird-homebrew-tap
       token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"
     commit_author:
       name: Netbird
