@@ -13,9 +13,9 @@
 
 set -e
 
-GITHUB_REPO="netbirdio/netbird"
+GITHUB_REPO="axtesys-gmbh/netbird"
 PORTS_CGIT_BASE="https://cgit.freebsd.org/ports/plain/security/netbird"
-GO_PROXY="https://proxy.golang.org/github.com/netbirdio/netbird/@v"
+GO_PROXY="https://proxy.golang.org/github.com/axtesys-gmbh/netbird/@v"
 OUTPUT_DIR="${OUTPUT_DIR:-.}"
 AWK_FIRST_FIELD='{print $1}'
 

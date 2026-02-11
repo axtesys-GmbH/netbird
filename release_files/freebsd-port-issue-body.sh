@@ -14,7 +14,7 @@
 
 set -e
 
-GITHUB_REPO="netbirdio/netbird"
+GITHUB_REPO="axtesys-gmbh/netbird"
 PORTS_CGIT_URL="https://cgit.freebsd.org/ports/plain/security/netbird/Makefile"
 
 fetch_current_ports_version() {
