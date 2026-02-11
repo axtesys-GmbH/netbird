@@ -104,15 +104,18 @@ generate_new_makefile() {
 
     # Check if old version had PORTREVISION
     if echo "$old_makefile" | grep -q "^PORTREVISION="; then
-        # Remove PORTREVISION line and update DISTVERSION
+        # Remove PORTREVISION line and update DISTVERSION and GO_MODULE
         echo "$old_makefile" | \
             sed "s/^DISTVERSION=.*/DISTVERSION=	${new_version}/" | \
+            sed "s|^GO_MODULE=.*|GO_MODULE=        github.com/${GITHUB_REPO}|" | \
             grep -v "^PORTREVISION="
     else
-        # Just update DISTVERSION
+        # Just update DISTVERSION and GO_MODULE
         echo "$old_makefile" | \
-            sed "s/^DISTVERSION=.*/DISTVERSION=	${new_version}/"
+            sed "s/^DISTVERSION=.*/DISTVERSION=	${new_version}/" | \
+            sed "s|^GO_MODULE=.*|GO_MODULE=        github.com/${GITHUB_REPO}|"
     fi
+
     return 0
 }
 
