@@ -21,6 +21,7 @@ concurrency:
 
 jobs:
   release_freebsd_port:
+    needs: [release, release_ui, release_ui_darwin]
     name: "FreeBSD Port / Build & Test"
     runs-on: ubuntu-22.04
     steps:
