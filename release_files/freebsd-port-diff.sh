@@ -20,10 +20,11 @@ OUTPUT_DIR="${OUTPUT_DIR:-.}"
 AWK_FIRST_FIELD='{print $1}'
 
 fetch_all_tags() {
+    # Fetch tags from GitHub tags page (no rate limiting, no auth needed)
     curl -sL "https://github.com/${GITHUB_REPO}/tags" 2>/dev/null | \
-        grep -oE '/releases/tag/v[0-9]+\.[0-9]+\.[0-9]+' | \
+        grep -oE '/releases/tag/v[0-9]+\.[0-9]+\.[0-9]+(-[a-zA-Z0-9]+)?' | \
         sed 's/.*\/v//' | \
-        sort -u -V
+        sort -u -t. -k1,1n -k2,2n -k3,3n -k4,4r
     return 0
 }
 
