@@ -555,7 +555,6 @@ dockers:
       - "--label=org.opencontainers.image.source=https://github.com/netbirdio/{{.ProjectName}}"
       - "--label=maintainer=dev@netbird.io"
   - image_templates:
-      - netbirdio/netbird-server:{{ .Version }}-amd64
       - ghcr.io/axtesys-gmbh/netbird-server:{{ .Version }}-amd64
     ids:
       - netbird-server
@@ -571,7 +570,6 @@ dockers:
       - "--label=org.opencontainers.image.source=https://github.com/netbirdio/{{.ProjectName}}"
       - "--label=maintainer=dev@netbird.io"
   - image_templates:
-      - netbirdio/netbird-server:{{ .Version }}-arm64v8
       - ghcr.io/axtesys-gmbh/netbird-server:{{ .Version }}-arm64v8
     ids:
       - netbird-server
@@ -587,7 +585,6 @@ dockers:
       - "--label=org.opencontainers.image.source=https://github.com/netbirdio/{{.ProjectName}}"
       - "--label=maintainer=dev@netbird.io"
   - image_templates:
-      - netbirdio/netbird-server:{{ .Version }}-arm
       - ghcr.io/axtesys-gmbh/netbird-server:{{ .Version }}-arm
     ids:
       - netbird-server
@@ -604,7 +601,6 @@ dockers:
       - "--label=org.opencontainers.image.source=https://github.com/netbirdio/{{.ProjectName}}"
       - "--label=maintainer=dev@netbird.io"
   - image_templates:
-      - netbirdio/reverse-proxy:{{ .Version }}-amd64
       - ghcr.io/axtesys-gmbh/reverse-proxy:{{ .Version }}-amd64
     ids:
       - netbird-proxy
@@ -620,7 +616,6 @@ dockers:
       - "--label=org.opencontainers.image.source=https://github.com/netbirdio/{{.ProjectName}}"
       - "--label=maintainer=dev@netbird.io"
   - image_templates:
-      - netbirdio/reverse-proxy:{{ .Version }}-arm64v8
       - ghcr.io/axtesys-gmbh/reverse-proxy:{{ .Version }}-arm64v8
     ids:
       - netbird-proxy
@@ -636,7 +631,6 @@ dockers:
       - "--label=org.opencontainers.image.source=https://github.com/netbirdio/{{.ProjectName}}"
       - "--label=maintainer=dev@netbird.io"
   - image_templates:
-      - netbirdio/reverse-proxy:{{ .Version }}-arm
       - ghcr.io/axtesys-gmbh/reverse-proxy:{{ .Version }}-arm
     ids:
       - netbird-proxy
