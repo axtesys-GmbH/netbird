@@ -556,7 +556,7 @@ dockers:
       - "--label=maintainer=dev@netbird.io"
   - image_templates:
       - netbirdio/netbird-server:{{ .Version }}-amd64
-      - ghcr.io/netbirdio/netbird-server:{{ .Version }}-amd64
+      - ghcr.io/axtesys-gmbh/netbird-server:{{ .Version }}-amd64
     ids:
       - netbird-server
     goarch: amd64
@@ -572,7 +572,7 @@ dockers:
       - "--label=maintainer=dev@netbird.io"
   - image_templates:
       - netbirdio/netbird-server:{{ .Version }}-arm64v8
-      - ghcr.io/netbirdio/netbird-server:{{ .Version }}-arm64v8
+      - ghcr.io/axtesys-gmbh/netbird-server:{{ .Version }}-arm64v8
     ids:
       - netbird-server
     goarch: arm64
@@ -588,7 +588,7 @@ dockers:
       - "--label=maintainer=dev@netbird.io"
   - image_templates:
       - netbirdio/netbird-server:{{ .Version }}-arm
-      - ghcr.io/netbirdio/netbird-server:{{ .Version }}-arm
+      - ghcr.io/axtesys-gmbh/netbird-server:{{ .Version }}-arm
     ids:
       - netbird-server
     goarch: arm
@@ -605,7 +605,7 @@ dockers:
       - "--label=maintainer=dev@netbird.io"
   - image_templates:
       - netbirdio/reverse-proxy:{{ .Version }}-amd64
-      - ghcr.io/netbirdio/reverse-proxy:{{ .Version }}-amd64
+      - ghcr.io/axtesys-gmbh/reverse-proxy:{{ .Version }}-amd64
     ids:
       - netbird-proxy
     goarch: amd64
@@ -621,7 +621,7 @@ dockers:
       - "--label=maintainer=dev@netbird.io"
   - image_templates:
       - netbirdio/reverse-proxy:{{ .Version }}-arm64v8
-      - ghcr.io/netbirdio/reverse-proxy:{{ .Version }}-arm64v8
+      - ghcr.io/axtesys-gmbh/reverse-proxy:{{ .Version }}-arm64v8
     ids:
       - netbird-proxy
     goarch: arm64
@@ -637,7 +637,7 @@ dockers:
       - "--label=maintainer=dev@netbird.io"
   - image_templates:
       - netbirdio/reverse-proxy:{{ .Version }}-arm
-      - ghcr.io/netbirdio/reverse-proxy:{{ .Version }}-arm
+      - ghcr.io/axtesys-gmbh/reverse-proxy:{{ .Version }}-arm
     ids:
       - netbird-proxy
     goarch: arm
@@ -808,25 +808,25 @@ docker_manifests:
       - ghcr.io/axtesys-gmbh/netbird/upload:{{ .Version }}-arm
       - ghcr.io/axtesys-gmbh/netbird/upload:{{ .Version }}-amd64
 
-  - name_template: ghcr.io/netbirdio/netbird-server:{{ .Version }}
+  - name_template: ghcr.io/axtesys-gmbh/netbird-server:{{ .Version }}
     image_templates:
       - ghcr.io/axtesys-gmbh/netbird-server:{{ .Version }}-arm64v8
       - ghcr.io/axtesys-gmbh/netbird-server:{{ .Version }}-arm
       - ghcr.io/axtesys-gmbh/netbird-server:{{ .Version }}-amd64
 
-  - name_template: ghcr.io/netbirdio/netbird-server:latest
+  - name_template: ghcr.io/axtesys-gmbh/netbird-server:latest
     image_templates:
       - ghcr.io/axtesys-gmbh/netbird-server:{{ .Version }}-arm64v8
       - ghcr.io/axtesys-gmbh/netbird-server:{{ .Version }}-arm
       - ghcr.io/axtesys-gmbh/netbird-server:{{ .Version }}-amd64
 
-  - name_template: ghcr.io/netbirdio/reverse-proxy:{{ .Version }}
+  - name_template: ghcr.io/axtesys-gmbh/reverse-proxy:{{ .Version }}
     image_templates:
       - ghcr.io/axtesys-gmbh/reverse-proxy:{{ .Version }}-arm64v8
       - ghcr.io/axtesys-gmbh/reverse-proxy:{{ .Version }}-arm
       - ghcr.io/axtesys-gmbh/reverse-proxy:{{ .Version }}-amd64
 
-  - name_template: ghcr.io/netbirdio/reverse-proxy:latest
+  - name_template: ghcr.io/axtesys-gmbh/reverse-proxy:latest
     image_templates:
       - ghcr.io/axtesys-gmbh/reverse-proxy:{{ .Version }}-arm64v8
       - ghcr.io/axtesys-gmbh/reverse-proxy:{{ .Version }}-arm
