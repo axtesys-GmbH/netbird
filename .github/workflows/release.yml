@@ -20,6 +20,45 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  release_opnsense_port:
+    needs: [ release, release_ui, release_ui_darwin ]
+    name: "OPNSense Port"
+    runs-on: ubuntu-22.04
+    steps:
+        - name: Checkout
+          uses: actions/checkout@v4
+
+        - name: Generate OPNSense port diff
+          run: bash release_files/opnsense-port-diff.sh
+
+        - name: Check if diff was generated
+          id: check_diff
+          run: |
+            if ls netbird-*.diff 1> /dev/null 2>&1; then
+              echo "diff_exists=true" >> $GITHUB_OUTPUT
+            else
+              echo "diff_exists=false" >> $GITHUB_OUTPUT
+              echo "No diff file generated (port may already be up to date)"
+            fi
+
+        - name: Extract version
+          if: steps.check_diff.outputs.diff_exists == 'true'
+          id: version
+          run: |
+            VERSION=$(ls netbird-*.diff | sed 's/netbird-\(.*\)\.diff/\1/')
+            echo "version=$VERSION" >> $GITHUB_OUTPUT
+            echo "Generated files for version: $VERSION"
+            cat netbird-*.diff
+
+        - name: Upload OPNSense port files
+          if: steps.check_diff.outputs.diff_exists == 'true'
+          uses: actions/upload-artifact@v4
+          with:
+            name: opnsense-port-files
+            path: |
+              ./netbird-*-issue.txt
+            retention-days: 30
+
   release_freebsd_port:
     needs: [release, release_ui, release_ui_darwin]
     name: "FreeBSD Port / Build & Test"
